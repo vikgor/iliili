@@ -15,7 +15,7 @@
 		056E705B23731B4E007E326C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 056E705923731B4E007E326C /* LaunchScreen.storyboard */; };
 		056E706423744A73007E326C /* MainInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056E706323744A73007E326C /* MainInteractor.swift */; };
 		056E706623744A7C007E326C /* MainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056E706523744A7C007E326C /* MainPresenter.swift */; };
-		056E706823744EEC007E326C /* Questions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 056E706723744EEC007E326C /* Questions.plist */; };
+		056E706823744EEC007E326C /* questions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 056E706723744EEC007E326C /* questions.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,7 +29,7 @@
 		056E705C23731B4E007E326C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		056E706323744A73007E326C /* MainInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInteractor.swift; sourceTree = "<group>"; };
 		056E706523744A7C007E326C /* MainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPresenter.swift; sourceTree = "<group>"; };
-		056E706723744EEC007E326C /* Questions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Questions.plist; sourceTree = "<group>"; };
+		056E706723744EEC007E326C /* questions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = questions.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +69,7 @@
 				056E705723731B4E007E326C /* Assets.xcassets */,
 				056E705923731B4E007E326C /* LaunchScreen.storyboard */,
 				056E705C23731B4E007E326C /* Info.plist */,
-				056E706723744EEC007E326C /* Questions.plist */,
+				056E706723744EEC007E326C /* questions.plist */,
 			);
 			path = iliili;
 			sourceTree = "<group>";
@@ -142,7 +142,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				056E706823744EEC007E326C /* Questions.plist in Resources */,
+				056E706823744EEC007E326C /* questions.plist in Resources */,
 				056E705B23731B4E007E326C /* LaunchScreen.storyboard in Resources */,
 				056E705823731B4E007E326C /* Assets.xcassets in Resources */,
 				056E705623731B48007E326C /* Main.storyboard in Resources */,
