@@ -16,17 +16,18 @@ struct Question {
 class MainInteractor {
     var presenter: MainPresenter?
     
+    //TODO: Move this to plist/json
     var questions: [Question] = [
-    Question(option1: "Иметь 100 рублей", option2: "Иметь 100 друзей"),
-    Question(option1: "Путешествие в прошлое", option2: "Путешествие в будущее"),
-    Question(option1: "Изучить океан", option2: "Изучить космос"),
-    Question(option1: "Уметь летать", option2: "Становиться невидимкой"),
-    Question(option1: "Бесконечный запас еды", option2: "Бесплатный вайфай везде")
+        Question(option1: "Иметь 100 рублей", option2: "Иметь 100 друзей"),
+        Question(option1: "Путешествие в прошлое", option2: "Путешествие в будущее"),
+        Question(option1: "Изучить океан", option2: "Изучить космос"),
+        Question(option1: "Уметь летать", option2: "Становиться невидимкой"),
+        Question(option1: "Бесконечный запас еды", option2: "Бесплатный вайфай везде")
     ]
     
     func getNewQuestion() {
         let options = questions.randomElement()
-        presenter?.newQuestion(question: options!)
+        presenter?.getNewQuestion(question: options!)
     }
     
 }

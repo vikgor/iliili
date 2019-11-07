@@ -14,8 +14,8 @@ class MainPresenter {
     
     var questions: Question?
     
-    func newQuestion(question: Question) {
-        viewController?.newQuestion(question: question)
+    func getNewQuestion(question: Question) {
+        viewController?.getNewQuestion(question: question)
     }
     
 }

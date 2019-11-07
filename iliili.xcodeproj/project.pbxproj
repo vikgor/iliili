@@ -30,6 +30,7 @@
 		056E706323744A73007E326C /* MainInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInteractor.swift; sourceTree = "<group>"; };
 		056E706523744A7C007E326C /* MainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPresenter.swift; sourceTree = "<group>"; };
 		056E706723744EEC007E326C /* questions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = questions.plist; sourceTree = "<group>"; };
+		056E70692374581C007E326C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +71,7 @@
 				056E705923731B4E007E326C /* LaunchScreen.storyboard */,
 				056E705C23731B4E007E326C /* Info.plist */,
 				056E706723744EEC007E326C /* questions.plist */,
+				056E70692374581C007E326C /* README.md */,
 			);
 			path = iliili;
 			sourceTree = "<group>";

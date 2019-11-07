@@ -20,8 +20,8 @@ class MainViewController: UIViewController {
         interactor?.getNewQuestion()
     }
     
-    
     var interactor: MainInteractor?
+    
     func setup() {
         let interactor = MainInteractor()
         self.interactor = interactor
@@ -37,11 +37,10 @@ class MainViewController: UIViewController {
     }
     
     
-    func newQuestion(question: Question) {
+    func getNewQuestion(question: Question) {
         option1.setTitle(question.option1, for: .normal)
         option2.setTitle(question.option2, for: .normal)
     }
     
-
 }
 
