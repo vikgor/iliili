@@ -16,6 +16,7 @@
 		056E706423744A73007E326C /* MainInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056E706323744A73007E326C /* MainInteractor.swift */; };
 		056E706623744A7C007E326C /* MainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056E706523744A7C007E326C /* MainPresenter.swift */; };
 		056E706823744EEC007E326C /* questions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 056E706723744EEC007E326C /* questions.plist */; };
+		056E706B2374BD31007E326C /* questions.json in Resources */ = {isa = PBXBuildFile; fileRef = 056E706A2374BD31007E326C /* questions.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		056E706523744A7C007E326C /* MainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPresenter.swift; sourceTree = "<group>"; };
 		056E706723744EEC007E326C /* questions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = questions.plist; sourceTree = "<group>"; };
 		056E70692374581C007E326C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		056E706A2374BD31007E326C /* questions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = questions.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,11 +69,12 @@
 				056E705023731B48007E326C /* SceneDelegate.swift */,
 				056E706223744A5C007E326C /* Main */,
 				056E705423731B48007E326C /* Main.storyboard */,
-				056E705723731B4E007E326C /* Assets.xcassets */,
 				056E705923731B4E007E326C /* LaunchScreen.storyboard */,
+				056E705723731B4E007E326C /* Assets.xcassets */,
 				056E705C23731B4E007E326C /* Info.plist */,
 				056E706723744EEC007E326C /* questions.plist */,
 				056E70692374581C007E326C /* README.md */,
+				056E706A2374BD31007E326C /* questions.json */,
 			);
 			path = iliili;
 			sourceTree = "<group>";
@@ -144,6 +147,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				056E706B2374BD31007E326C /* questions.json in Resources */,
 				056E706823744EEC007E326C /* questions.plist in Resources */,
 				056E705B23731B4E007E326C /* LaunchScreen.storyboard in Resources */,
 				056E705823731B4E007E326C /* Assets.xcassets in Resources */,
@@ -309,6 +313,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J349HN2J4J;
 				INFOPLIST_FILE = iliili/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -327,6 +332,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J349HN2J4J;
 				INFOPLIST_FILE = iliili/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

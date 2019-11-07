@@ -36,11 +36,9 @@ class MainViewController: UIViewController {
         interactor?.getNewQuestion()
     }
     
-    
     func getNewQuestion(question: Question) {
-        option1.setTitle(question.option1, for: .normal)
-        option2.setTitle(question.option2, for: .normal)
+        option1.setTitle(question.options.option1, for: .normal)
+        option2.setTitle(question.options.option2, for: .normal)
     }
     
 }
-
