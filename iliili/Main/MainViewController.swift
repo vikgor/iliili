@@ -25,25 +25,23 @@ class MainViewController: UIViewController {
     func setup() {
         let interactor = MainInteractor()
         self.interactor = interactor
-//        let presenter = MainPresenter()
-//        interactor.presenter = presenter
-//        presenter.viewController = self
+        let presenter = MainPresenter()
+        interactor.presenter = presenter
+        presenter.viewController = self
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        
-        
+        interactor?.getNewQuestion()
     }
-
     
-    func getOption1(string: String) {
-        option1.titleLabel?.text = string
+    
+    func newQuestion(question: Question) {
+        option1.setTitle(question.option1, for: .normal)
+        option2.setTitle(question.option2, for: .normal)
     }
-    func getOption2(string: String) {
-        option2.titleLabel?.text = string
-    }
+    
 
 }
 

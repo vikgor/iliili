@@ -12,17 +12,10 @@ class MainPresenter {
     
     weak var viewController: MainViewController?
     
-    func getOption1(string: String) {
-        viewController?.getOption1(string: string)
-        print("getOption1 called")
-    }
-    func getOption2(string: String) {
-        viewController?.getOption2(string: string)
-        print("getOption2 called")
-    }
+    var questions: Question?
     
-    func test() {
-        print("test called")
+    func newQuestion(question: Question) {
+        viewController?.newQuestion(question: question)
     }
     
 }
