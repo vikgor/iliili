@@ -20,26 +20,15 @@ struct Options: Codable {
 
 class MainInteractor {
     var presenter: MainPresenter?
+    var startInteractor = StartInteractor()
     
-    let questionsList = "https://8137147.xyz/questions.json"
+
+    
     
     func getNewQuestion() {
-        let options = getStructFromJSON().randomElement()
+            
+        let options = startInteractor.getStructFromJSON().randomElement()
         presenter?.getNewQuestion(question: options!)
-    }
-    
-    func getStructFromJSON() -> [Question] {
-//        //Reading from local file
-//        let url = Bundle.main.url(forResource: "questions", withExtension: "json")!
-//        let data = try! Data(contentsOf: url)
-        
-        //Reading from a file online
-        let myURL = NSURL(string: questionsList)
-        let data = try! Data(contentsOf: myURL! as URL)
-//        let data = try! Data(contentsOf: myURL! as URL, encoding: .windowsCP1251) Just in case Cyrillic is crazy
-        
-        let decoder = JSONDecoder()
-        return try! decoder.decode([Question].self, from: data)
     }
 
 }

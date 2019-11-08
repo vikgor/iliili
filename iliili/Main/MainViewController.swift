@@ -13,10 +13,12 @@ class MainViewController: UIViewController {
     @IBOutlet weak var option1: UIButton!
     @IBOutlet weak var option2: UIButton!
     
-    @IBAction func option1(_ sender: Any) {
+    @IBAction func option1(_ sender: UIButton) {
+        animateButton(sender)
         interactor?.getNewQuestion()
     }
-    @IBAction func option2(_ sender: Any) {
+    @IBAction func option2(_ sender: UIButton) {
+        animateButton(sender)
         interactor?.getNewQuestion()
     }
     
@@ -39,6 +41,23 @@ class MainViewController: UIViewController {
     func getNewQuestion(question: Question) {
         option1.setTitle(question.options.option1, for: .normal)
         option2.setTitle(question.options.option2, for: .normal)
+    }
+    
+    
+    //MARK: Где должны находиться UI функции (анимации, расположение объектов)?
+    func animateButton(_ sender: UIButton) {
+        UIButton.animate(withDuration: 0.2, delay: 0,
+                         animations: {
+//                            sender.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+                            sender.transform = CGAffineTransform(rotationAngle: 69)
+//                            sender.transform = CGAffineTransform(translationX: 50, y: 0)
+                            
+        },
+                         completion: { finish in
+                            UIButton.animate(withDuration: 0.2, animations: {
+                                sender.transform = CGAffineTransform.identity
+                            })
+        })
     }
     
 }

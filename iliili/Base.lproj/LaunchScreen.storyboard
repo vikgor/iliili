@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,17 +15,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ИЛИ ИЛИ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wop-62-9y6">
-                                <rect key="frame" x="149" y="323.5" width="77.5" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s6b-JH-EKA">
+                                <rect key="frame" x="0.0" y="333.5" width="375" height="333.5"/>
+                                <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rRs-h6-ffg">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="333.5"/>
+                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="Wop-62-9y6" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="SE1-0F-FDq"/>
-                            <constraint firstItem="Wop-62-9y6" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="gZk-Qw-vR7"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="s6b-JH-EKA" secondAttribute="bottom" id="6Pz-mt-C3Y"/>
+                            <constraint firstItem="s6b-JH-EKA" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="C8s-d0-L7I"/>
+                            <constraint firstItem="rRs-h6-ffg" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="NTh-ab-HP6"/>
+                            <constraint firstItem="rRs-h6-ffg" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="dXa-Wp-iVZ"/>
+                            <constraint firstItem="rRs-h6-ffg" firstAttribute="height" secondItem="6Tk-OE-BBY" secondAttribute="height" multiplier="1:2" id="fFZ-uB-dYP"/>
+                            <constraint firstItem="s6b-JH-EKA" firstAttribute="height" secondItem="6Tk-OE-BBY" secondAttribute="height" multiplier="1:2" id="lgb-HA-VRk"/>
+                            <constraint firstItem="s6b-JH-EKA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="p0I-XE-8gb"/>
+                            <constraint firstItem="rRs-h6-ffg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="rRA-Br-bZo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
