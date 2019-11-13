@@ -12,29 +12,39 @@ class StartInteractor {
     
     var presenter: StartPresenter?
     
-    let questionsList = "https://bjayds1.fvds.ru/questions.json"
+//    let questionsList = "https://bjayds1.fvds.ru/questions.json"
+    let questionsList = "https://firebasestorage.googleapis.com/v0/b/iliili.appspot.com/o/questions.json?alt=media&token=7e0b14a4-f0c6-4858-8103-1cd6dae40c1f"
     
-    func getStructFromJSON() -> [Question] {
+    func start() {
+        presenter?.showLoading()
+        getStructFromJSON()
+    }
+    
+    func getStructFromJSON() {
+        
+        var questions: [Question]?
+        
         if let url = URL(string: questionsList) {
             do {
-                // load from server
+                print("from the server file")
                 let data = try Data(contentsOf: url as URL)
                 let decoder = JSONDecoder()
-                print("called the server file")
-                return try decoder.decode([Question].self, from: data)
+                questions = try decoder.decode([Question].self, from: data)
                 
             } catch {
-                // load from the local file
+                print("from the local file")
                 let url = Bundle.main.url(forResource: "questions", withExtension: "json")!
                 let data = try! Data(contentsOf: url)
                 let decoder = JSONDecoder()
-                print("called the local file")
-                return try! decoder.decode([Question].self, from: data)
+                questions = try! decoder.decode([Question].self, from: data)
             }
+
+            presenter?.receivedQuestions(questions: questions!)
+            
         } else {
             //TODO: what to I put here?
             // the URL was bad!
-            return []
+//            return []
         }
     }
 }

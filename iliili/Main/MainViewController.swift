@@ -15,12 +15,14 @@ class MainViewController: UIViewController {
     
     @IBAction func option1(_ sender: UIButton) {
         animateButton(sender)
-        interactor?.getNewQuestion()
+        interactor?.getNewQuestion(questions: questions!)
     }
     @IBAction func option2(_ sender: UIButton) {
         animateButton(sender)
-        interactor?.getNewQuestion()
+        interactor?.getNewQuestion(questions: questions!)
     }
+    
+    var questions: [Question]?
     
     var interactor: MainInteractor?
     
@@ -35,7 +37,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        interactor?.getNewQuestion()
+        interactor?.getNewQuestion(questions: questions!)
     }
     
     func getNewQuestion(question: Question) {
@@ -44,14 +46,11 @@ class MainViewController: UIViewController {
     }
     
     
-    //MARK: Где должны находиться UI функции (анимации, расположение объектов)?
     func animateButton(_ sender: UIButton) {
-        UIButton.animate(withDuration: 0.2, delay: 0,
+        UIButton.animate(withDuration: 0.2,
+                         delay: 0,
                          animations: {
-//                            sender.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
                             sender.transform = CGAffineTransform(rotationAngle: 69)
-//                            sender.transform = CGAffineTransform(translationX: 50, y: 0)
-                            
         },
                          completion: { finish in
                             UIButton.animate(withDuration: 0.2, animations: {

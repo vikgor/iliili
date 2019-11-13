@@ -12,6 +12,13 @@ class StartPresenter {
     
     weak var viewController: StartViewController?
     
+    func showLoading() {
+        viewController?.showLoading()
+    }
     
+    func receivedQuestions(questions: [Question]) {
+//        viewController?.hideLoading()
+        viewController?.showNextScreen(questions: questions)
+    }
     
 }

@@ -19,6 +19,7 @@
 		0599F8422375CC7D00F7804E /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0599F8412375CC7D00F7804E /* StartViewController.swift */; };
 		0599F8442375CC8A00F7804E /* StartInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0599F8432375CC8A00F7804E /* StartInteractor.swift */; };
 		0599F8462375CC9400F7804E /* StartPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0599F8452375CC9400F7804E /* StartPresenter.swift */; };
+		F5E758871EA5B3F5A73846B9 /* Pods_iliili.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A0AEABC085FABD2C4EF6FC /* Pods_iliili.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,9 @@
 		0599F8412375CC7D00F7804E /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		0599F8432375CC8A00F7804E /* StartInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartInteractor.swift; sourceTree = "<group>"; };
 		0599F8452375CC9400F7804E /* StartPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartPresenter.swift; sourceTree = "<group>"; };
+		ABE565BACDAA628EE20EA491 /* Pods-iliili.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iliili.release.xcconfig"; path = "Target Support Files/Pods-iliili/Pods-iliili.release.xcconfig"; sourceTree = "<group>"; };
+		C60239A9410F360A2A1E4762 /* Pods-iliili.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iliili.debug.xcconfig"; path = "Target Support Files/Pods-iliili/Pods-iliili.debug.xcconfig"; sourceTree = "<group>"; };
+		F7A0AEABC085FABD2C4EF6FC /* Pods_iliili.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iliili.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5E758871EA5B3F5A73846B9 /* Pods_iliili.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,6 +60,8 @@
 			children = (
 				056E704D23731B48007E326C /* iliili */,
 				056E704C23731B48007E326C /* Products */,
+				255E2EAAF21008DD7302BF3A /* Pods */,
+				C684FCF85B26552349A55D45 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,6 +110,24 @@
 			path = Start;
 			sourceTree = "<group>";
 		};
+		255E2EAAF21008DD7302BF3A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C60239A9410F360A2A1E4762 /* Pods-iliili.debug.xcconfig */,
+				ABE565BACDAA628EE20EA491 /* Pods-iliili.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		C684FCF85B26552349A55D45 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F7A0AEABC085FABD2C4EF6FC /* Pods_iliili.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -110,9 +135,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 056E705F23731B4E007E326C /* Build configuration list for PBXNativeTarget "iliili" */;
 			buildPhases = (
+				8458AA8A532E43FB19FA3C21 /* [CP] Check Pods Manifest.lock */,
 				056E704723731B48007E326C /* Sources */,
 				056E704823731B48007E326C /* Frameworks */,
 				056E704923731B48007E326C /* Resources */,
+				00F1270D46DD68F5DFC93EA9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -169,6 +196,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		00F1270D46DD68F5DFC93EA9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iliili/Pods-iliili-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iliili/Pods-iliili-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iliili/Pods-iliili-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8458AA8A532E43FB19FA3C21 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-iliili-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		056E704723731B48007E326C /* Sources */ = {
@@ -324,6 +393,7 @@
 		};
 		056E706023731B4E007E326C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C60239A9410F360A2A1E4762 /* Pods-iliili.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -343,6 +413,7 @@
 		};
 		056E706123731B4E007E326C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ABE565BACDAA628EE20EA491 /* Pods-iliili.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

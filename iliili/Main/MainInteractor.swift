@@ -22,12 +22,9 @@ class MainInteractor {
     var presenter: MainPresenter?
     var startInteractor = StartInteractor()
     
-
-    
-    
-    func getNewQuestion() {
-            
-        let options = startInteractor.getStructFromJSON().randomElement()
+    func getNewQuestion(questions: [Question]) {
+//        let options = startInteractor.getStructFromJSON().randomElement()
+        let options = questions.randomElement()
         presenter?.getNewQuestion(question: options!)
     }
 
