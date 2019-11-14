@@ -26,6 +26,7 @@ class StartViewController: UIViewController {
     }
     
     @objc func startGame() {
+        print("startGame")
         interactor?.start()
     }
     
@@ -34,8 +35,8 @@ class StartViewController: UIViewController {
         setup()
     }
 
-    //TODO: fix loading spinner
     func showLoading() {
+        print("now calling showLoading")
         let Indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
         Indicator.label.text = "Indicator"
         Indicator.isUserInteractionEnabled = false
@@ -44,20 +45,24 @@ class StartViewController: UIViewController {
     }
     
     func hideLoading() {
+        print("hideLoading")
         MBProgressHUD.hide(for: self.view, animated: true)
     }
     
     func showNextScreen(questions: [Question]) {
-        let vc = self.storyboard?.instantiateViewController(identifier: "mainView") as! MainViewController
-        vc.questions = questions
-        vc.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-        self.present(vc, animated:true, completion:nil)
+        print("showing next screen")
+        DispatchQueue.main.async {
+            let vc = self.storyboard?.instantiateViewController(identifier: "mainView") as! MainViewController
+            vc.questions = questions
+            vc.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+            self.present(vc, animated:true, completion:nil)
+        }
     }
 }
 
 
 
-//MARK: The old way of showing loading jsut in case
+//MARK: The old way of showing loading just in case
 
 //var vSpinner : UIView?
 

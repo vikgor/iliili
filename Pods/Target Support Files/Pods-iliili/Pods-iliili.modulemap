@@ -1,0 +1,6 @@
+framework module Pods_iliili {
+  umbrella header "Pods-iliili-umbrella.h"
+
+  export *
+  module * { export * }
+}
