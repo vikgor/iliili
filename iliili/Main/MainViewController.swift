@@ -14,11 +14,11 @@ class MainViewController: UIViewController {
     @IBOutlet weak var option2: UIButton!
     
     @IBAction func option1(_ sender: UIButton) {
-        animateButton(sender)
+        animateButton(sender, rotationAngle: 69)
         interactor?.getNewQuestion(questions: questions!)
     }
     @IBAction func option2(_ sender: UIButton) {
-        animateButton(sender)
+        animateButton(sender, rotationAngle: -69)
         interactor?.getNewQuestion(questions: questions!)
     }
     
@@ -46,11 +46,11 @@ class MainViewController: UIViewController {
     }
     
     
-    func animateButton(_ sender: UIButton) {
+    func animateButton(_ sender: UIButton, rotationAngle: Int) {
         UIButton.animate(withDuration: 0.2,
                          delay: 0,
                          animations: {
-                            sender.transform = CGAffineTransform(rotationAngle: 69)
+                            sender.transform = CGAffineTransform(rotationAngle: CGFloat(rotationAngle))
         },
                          completion: { finish in
                             UIButton.animate(withDuration: 0.2, animations: {

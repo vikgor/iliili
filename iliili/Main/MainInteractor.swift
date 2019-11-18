@@ -8,16 +8,6 @@
 
 import Foundation
 
-struct Question: Codable {
-    var id: Int
-    var options: Options
-}
-
-struct Options: Codable {
-    var option1: String
-    var option2: String
-}
-
 class MainInteractor {
     var presenter: MainPresenter?
     var startInteractor = StartInteractor()

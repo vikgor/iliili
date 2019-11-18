@@ -26,7 +26,6 @@ class StartViewController: UIViewController {
     }
     
     @objc func startGame() {
-        print("startGame")
         interactor?.start()
     }
     
@@ -38,19 +37,17 @@ class StartViewController: UIViewController {
     func showLoading() {
         print("now calling showLoading")
         let Indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
-        Indicator.label.text = "Indicator"
+        Indicator.label.text = "Загрузка"
         Indicator.isUserInteractionEnabled = false
-        Indicator.detailsLabel.text = "fetching details"
+        Indicator.detailsLabel.text = "Загружаем вопросы..."
         Indicator.show(animated: true)
     }
     
     func hideLoading() {
-        print("hideLoading")
         MBProgressHUD.hide(for: self.view, animated: true)
     }
     
     func showNextScreen(questions: [Question]) {
-        print("showing next screen")
         DispatchQueue.main.async {
             let vc = self.storyboard?.instantiateViewController(identifier: "mainView") as! MainViewController
             vc.questions = questions
@@ -59,32 +56,3 @@ class StartViewController: UIViewController {
         }
     }
 }
-
-
-
-//MARK: The old way of showing loading just in case
-
-//var vSpinner : UIView?
-
-//func showLoading(onView : UIView) {
-//    print("trying to show loading")
-//    let spinnerView = UIView.init(frame: onView.bounds)
-//    spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
-//    let ai = UIActivityIndicatorView.init(style: UIActivityIndicatorView.Style.large)
-//    ai.startAnimating()
-//    ai.center = spinnerView.center
-//
-//    DispatchQueue.main.async {
-//        spinnerView.addSubview(ai)
-//        onView.addSubview(spinnerView)
-//    }
-//
-//    vSpinner = spinnerView
-//}
-//
-//func hideLoading() {
-//    DispatchQueue.main.async {
-//        self.vSpinner?.removeFromSuperview()
-//        self.vSpinner = nil
-//    }
-//}

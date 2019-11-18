@@ -7,5 +7,8 @@ target 'iliili' do
 
   # Pods for iliili
   pod 'MBProgressHUD', '~> 1.1'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Database'
+  # pod 'CodableFirebase'
   
 end
