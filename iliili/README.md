@@ -11,9 +11,9 @@
 - [x] Show the main view as it used to be shown
 - [x] The initial loading ("Start" pressed -> show the questions) is long, what can I do about it?
 - [ ] Getting %
-    - [ ] Write to the json on the server (if connected)
+    - [x] Write to the json on the server (if connected)
     - [ ] How do I check if this specific user has already chosen an option (using Firebase databases maybe?)
-    - [ ] Fix the json, add the % section. Get the %
+    - [x] Fix the json, add the % section. Get the %
     - [ ] Show animated view with %
 
 ## Optional:

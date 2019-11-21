@@ -15,13 +15,11 @@ class MainViewController: UIViewController {
     
     @IBAction func option1(_ sender: UIButton) {
         animateButton(sender, rotationAngle: 69)
-        interactor?.getNewQuestion(questions: questions!)
-//        interactor?.buttonClicked(sender: option1)
+        interactor?.getNewQuestion(sender: option1, questions: questions!)
     }
     @IBAction func option2(_ sender: UIButton) {
         animateButton(sender, rotationAngle: -69)
-        interactor?.getNewQuestion(questions: questions!)
-//        interactor?.buttonClicked(sender: option2)
+        interactor?.getNewQuestion(sender: option2, questions: questions!)
     }
     
     var questions: [Question]?
@@ -39,9 +37,10 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        interactor?.getNewQuestion(questions: questions!)
+//        interactor?.getFirstQuestion(questions: questions!)
         option1.tag = 1
         option2.tag = 2
+        interactor?.getRandomNumber(questions: questions!)
     }
     
     func getNewQuestion(question: Question) {

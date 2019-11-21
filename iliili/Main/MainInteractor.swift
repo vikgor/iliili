@@ -13,54 +13,54 @@ import FirebaseDatabase
 class MainInteractor {
     var presenter: MainPresenter?
     
-    func getNewQuestion(questions: [Question]) {
-        let options = questions.randomElement()
-        presenter?.getNewQuestion(question: options!)
-//        sendVote()
-    }
-//    
-//    func sendVote() {
-//        //TODO: send votes here
-//                
-////        here's what it looks like for the viewController:
-////        option1.setTitle(question.options.option1, for: .normal)
-////        option2.setTitle(question.options.option2, for: .normal)
-//                
-//            
-////        Depending on the tag, send a vote
-//    }
-//    func buttonClicked(sender: UIButton) {
-//        switch sender.tag {
-//        case 1:
-////            sender.isHidden = true //button1
-//            print("1")
-//            letsGetThatShitTogether()
-//            break;
-//        case 2:
-////            sender.isHidden = true //button2
-//            print("2")
-//            break;
-//        default: ()
-//        break;
-//        }
-//    }
-//    
-//    
-//    
-//    
-//
-//    
-//    func letsGetThatShitTogether() {
-////        Database.database().reference().child("questions").observe(.value) { snapshot in
-////          print(snapshot.childrenCount)
-////        }
-//        
-//        Database.database().reference().child("questions").child("2").observe(.value) { snapshot in
-//          print(snapshot.value)
-//        }
-//        
-//        Database.database().reference().child("questions").child("2").child("options").child("option2votes").setValue(69)
-//        
+//    func getFirstQuestion(questions: [Question]) {
+//        let options = questions.randomElement()
+//        presenter?.getNewQuestion(question: options!)
 //    }
     
+    func sendVote(questionNumber: Int, optionVotes: String) {
+        print("question set ", questionNumber)
+    Database.database().reference().child("questions").child(String(questionNumber)).child("options").child(String(optionVotes)).observeSingleEvent(of: .value, with: { snapshot in
+        let valString = snapshot.value as? Int
+        print("Votes before:", valString!)
+        let value = valString! + 1
+        print("Votes after:", value)
+            
+        Database.database().reference().child("questions").child(String(questionNumber)).child("options").child(String(optionVotes)).setValue(value)
+    })
+    }
+    
+    
+    var randomShit: Int?
+    func getRandomNumber(questions: [Question]) {
+        randomShit = Int.random(in: 0...(questions.count - 1))
+    }
+        
+    func getNewQuestion(sender: UIButton, questions: [Question]) {
+        
+        let randomQuestion = Int.random(in: 0...(questions.count - 1))
+        let options = questions[randomQuestion]
+        
+        
+        switch sender.tag {
+        case 1:
+            print("option 1 tapped")
+            
+            sendVote(questionNumber: randomShit!, optionVotes: "option1votes")
+            
+            break;
+        case 2:
+            print("option 2 tapped")
+            
+            sendVote(questionNumber: randomShit!, optionVotes: "option2votes")
+            
+            break;
+        default: ()
+        break;
+        }
+        
+        randomShit = randomQuestion
+        presenter?.getNewQuestion(question: options)
+        
+    }
 }
