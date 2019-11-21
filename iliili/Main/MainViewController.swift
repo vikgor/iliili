@@ -16,10 +16,12 @@ class MainViewController: UIViewController {
     @IBAction func option1(_ sender: UIButton) {
         animateButton(sender, rotationAngle: 69)
         interactor?.getNewQuestion(questions: questions!)
+//        interactor?.buttonClicked(sender: option1)
     }
     @IBAction func option2(_ sender: UIButton) {
         animateButton(sender, rotationAngle: -69)
         interactor?.getNewQuestion(questions: questions!)
+//        interactor?.buttonClicked(sender: option2)
     }
     
     var questions: [Question]?
@@ -38,6 +40,8 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         setup()
         interactor?.getNewQuestion(questions: questions!)
+        option1.tag = 1
+        option2.tag = 2
     }
     
     func getNewQuestion(question: Question) {
