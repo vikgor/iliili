@@ -33,7 +33,6 @@ class StartInteractor {
         getStructFromJSON()
     }
     
-    //TODO: fix this
     func convertDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void) {
         Database.database().reference().child("questions").observeSingleEvent(of: .value, with: { snapshot in
             guard let value = snapshot.value else { return }

@@ -14,8 +14,10 @@
     - [x] Write to the json on the server (if connected)
     - [ ] How do I check if this specific user has already chosen an option (using Firebase databases maybe?)
     - [x] Fix the json, add the % section. Get the %
-    - [ ] Fix the extra vote on the first call of getNewQuestion
+    - [x] Fix the extra vote on the first call of getNewQuestion
     - [ ] Show animated view with %
+- [ ] Getting the questions to a local variable
+- [ ] Check if works without connection
 
 ## Optional:
 

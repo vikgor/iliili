@@ -41,6 +41,7 @@ class MainViewController: UIViewController {
         option1.tag = 1
         option2.tag = 2
         interactor?.getRandomNumber(questions: questions!)
+        interactor?.getNewQuestion(questions: questions!)
     }
     
     func getNewQuestion(question: Question) {

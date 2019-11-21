@@ -13,11 +13,6 @@ import FirebaseDatabase
 class MainInteractor {
     var presenter: MainPresenter?
     
-//    func getFirstQuestion(questions: [Question]) {
-//        let options = questions.randomElement()
-//        presenter?.getNewQuestion(question: options!)
-//    }
-    
     func sendVote(questionNumber: Int, optionVotes: String) {
         print("question set ", questionNumber)
     Database.database().reference().child("questions").child(String(questionNumber)).child("options").child(String(optionVotes)).observeSingleEvent(of: .value, with: { snapshot in
@@ -35,6 +30,15 @@ class MainInteractor {
     func getRandomNumber(questions: [Question]) {
         randomShit = Int.random(in: 0...(questions.count - 1))
     }
+    
+    func getNewQuestion(questions: [Question]) {
+        
+        let randomQuestion = Int.random(in: 0...(questions.count - 1))
+        let options = questions[randomQuestion]
+        randomShit = randomQuestion
+        presenter?.getNewQuestion(question: options)
+        
+    }
         
     func getNewQuestion(sender: UIButton, questions: [Question]) {
         
@@ -45,15 +49,11 @@ class MainInteractor {
         switch sender.tag {
         case 1:
             print("option 1 tapped")
-            
             sendVote(questionNumber: randomShit!, optionVotes: "option1votes")
-            
             break;
         case 2:
             print("option 2 tapped")
-            
             sendVote(questionNumber: randomShit!, optionVotes: "option2votes")
-            
             break;
         default: ()
         break;
