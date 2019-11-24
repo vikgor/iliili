@@ -18,6 +18,7 @@
     - [ ] Show animated view with %
 - [ ] Getting the questions to a local variable
 - [ ] Check if works without connection
+- [ ] Show the new question after the votes result animation 
 
 ## Optional:
 

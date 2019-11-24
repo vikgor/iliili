@@ -25,7 +25,6 @@ struct Options: Codable {
 class StartInteractor {
     
     var presenter: StartPresenter?
-    
     let questionsList = "https://firebasestorage.googleapis.com/v0/b/iliili.appspot.com/o/questions.json?alt=media&token=7e0b14a4-f0c6-4858-8103-1cd6dae40c1f"
     
     func start() {
@@ -55,7 +54,6 @@ class StartInteractor {
                     let data = try Data(contentsOf: url as URL)
                     let decoder = JSONDecoder()
                     questions = try decoder.decode([Question].self, from: data)
-                    
                 } catch {
                     print("reading from the local file")
                     let url = Bundle.main.url(forResource: "questions", withExtension: "json")!

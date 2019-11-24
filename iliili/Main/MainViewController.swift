@@ -15,16 +15,16 @@ class MainViewController: UIViewController {
     
     @IBAction func option1(_ sender: UIButton) {
         animateButton(sender, rotationAngle: 69)
-        interactor?.getNewQuestion(sender: option1, questions: questions!)
+        interactor?.getNewQuestion(questions: questions!, sender: option1)
     }
     @IBAction func option2(_ sender: UIButton) {
         animateButton(sender, rotationAngle: -69)
-        interactor?.getNewQuestion(sender: option2, questions: questions!)
+        interactor?.getNewQuestion(questions: questions!, sender: option2)
     }
-    
-    var questions: [Question]?
+    @IBOutlet weak var iliLabel: UILabel!
     
     var interactor: MainInteractor?
+    var questions: [Question]?
     
     func setup() {
         let interactor = MainInteractor()
@@ -37,10 +37,8 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-//        interactor?.getFirstQuestion(questions: questions!)
         option1.tag = 1
         option2.tag = 2
-        interactor?.getRandomNumber(questions: questions!)
         interactor?.getNewQuestion(questions: questions!)
     }
     
@@ -61,6 +59,76 @@ class MainViewController: UIViewController {
                                 sender.transform = CGAffineTransform.identity
                             })
         })
+        hideIliLabel()
+    }
+    
+    
+    
+    
+    
+    
+    
+    func showVotesColor(percentageOfVotes: Int, backgroundColor: UIColor) {
+        
+        let votesBackground = UIView(frame: CGRect(x: 0, y: self.view.bounds.size.height/2-25, width: self.view.bounds.size.width, height: 50))
+        votesBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0.8)
+        self.view.addSubview(votesBackground)
+        votesBackground.layer.cornerRadius = 10
+//        votesBackground.layer.borderWidth = 0.5
+//        votesBackground.layer.borderColor = UIColor.white.withAlphaComponent(1.0).cgColor
+        
+        let votesColor = UIView(frame: CGRect(x: 0, y: self.view.bounds.size.height/2-25, width: 0, height: 50))
+        votesColor.backgroundColor = backgroundColor.withAlphaComponent(0.8)
+        self.view.addSubview(votesColor)
+        votesColor.layer.cornerRadius = 10
+        let votesWidth = CGFloat(percentageOfVotes)/100
+        
+        
+        UIView.animate(withDuration: 2.0) {
+            votesColor.frame = CGRect(x: 0, y: self.view.bounds.size.height/2-25, width: self.view.bounds.size.width * votesWidth, height: 50)
+        }
+        
+        
+        let votesPercentageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: 50))
+        votesPercentageLabel.center = CGPoint(x: self.view.bounds.size.width/2, y: self.view.bounds.size.height/2)
+        votesPercentageLabel.textColor = .white
+        votesPercentageLabel.font = votesPercentageLabel.font.withSize(20)
+        votesPercentageLabel.textAlignment = .center
+        votesPercentageLabel.text = "С вами согласны \(percentageOfVotes)% пользователей"
+        self.view.addSubview(votesPercentageLabel)
+        
+        
+        let seconds = 3.0
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+            self.hideVotesColor(votesBackground: votesBackground, votesColor: votesColor, backgroundColor: backgroundColor, votesPercentageLabel: votesPercentageLabel)
+        }
+    }
+    
+    func hideVotesColor(votesBackground: UIView, votesColor: UIView, backgroundColor: UIColor, votesPercentageLabel: UILabel) {
+        UIView.animate(withDuration: 2.0) {
+            votesBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0)
+            votesColor.backgroundColor = backgroundColor.withAlphaComponent(0)
+            
+//            votesBackground.layer.borderColor = UIColor.white.withAlphaComponent(0.0).cgColor
+//            votesBackground.layer.borderWidth = 0.0
+            
+            
+//            votesPercentageLabel.font = votesPercentageLabel.font.withSize(0)
+            votesPercentageLabel.alpha = 0
+            
+        }
+        
+        print("Hiding the vote colors")
+    }
+    
+    
+    //MARK: Do I need this?
+    func hideIliLabel() {
+        UILabel.animate(withDuration: 1.0) {
+            self.iliLabel.alpha = 0
+        }
     }
     
 }
+
+

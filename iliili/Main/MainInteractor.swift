@@ -12,55 +12,64 @@ import FirebaseDatabase
 
 class MainInteractor {
     var presenter: MainPresenter?
-    
-    func sendVote(questionNumber: Int, optionVotes: String) {
-        print("question set ", questionNumber)
-    Database.database().reference().child("questions").child(String(questionNumber)).child("options").child(String(optionVotes)).observeSingleEvent(of: .value, with: { snapshot in
-        let valString = snapshot.value as? Int
-        print("Votes before:", valString!)
-        let value = valString! + 1
-        print("Votes after:", value)
-            
-        Database.database().reference().child("questions").child(String(questionNumber)).child("options").child(String(optionVotes)).setValue(value)
-    })
-    }
-    
-    
-    var randomShit: Int?
-    func getRandomNumber(questions: [Question]) {
-        randomShit = Int.random(in: 0...(questions.count - 1))
-    }
+    var previousRandomQuestion: Int?
+    let optionVotesString = ("option1votes", "option2votes")
+    let database = Database.database().reference().child("questions")
     
     func getNewQuestion(questions: [Question]) {
-        
         let randomQuestion = Int.random(in: 0...(questions.count - 1))
         let options = questions[randomQuestion]
-        randomShit = randomQuestion
+        previousRandomQuestion = randomQuestion
         presenter?.getNewQuestion(question: options)
-        
     }
         
-    func getNewQuestion(sender: UIButton, questions: [Question]) {
-        
+    func getNewQuestion(questions: [Question], sender: UIButton) {
         let randomQuestion = Int.random(in: 0...(questions.count - 1))
         let options = questions[randomQuestion]
-        
         
         switch sender.tag {
         case 1:
-            print("option 1 tapped")
-            sendVote(questionNumber: randomShit!, optionVotes: "option1votes")
+            sendVote(questionNumber: previousRandomQuestion!, optionVotes: optionVotesString.0, backgroundColor: sender.backgroundColor!)
             break;
         case 2:
-            print("option 2 tapped")
-            sendVote(questionNumber: randomShit!, optionVotes: "option2votes")
+            sendVote(questionNumber: previousRandomQuestion!, optionVotes: optionVotesString.1, backgroundColor: sender.backgroundColor!)
             break;
         default: ()
         break;
         }
         
-        randomShit = randomQuestion
+        previousRandomQuestion = randomQuestion
         presenter?.getNewQuestion(question: options)
+    }
+    
+    func sendVote(questionNumber: Int, optionVotes: String, backgroundColor: UIColor) {
+        database.child(String(questionNumber)).child("options").child(optionVotes).observeSingleEvent(of: .value, with: { snapshot in
+            var votes = snapshot.value as? Int
+            votes! += 1
+            self.database.child(String(questionNumber)).child("options").child(optionVotes).setValue(votes)
+            self.getPercentage(optionVotes: optionVotes, questionNumber: questionNumber, votes: votes!, backgroundColor: backgroundColor)
+    })
         
     }
+    
+    func getPercentage(optionVotes: String, questionNumber: Int, votes: Int, backgroundColor: UIColor) {
+        if optionVotes != self.optionVotesString.0 {
+            self.database.child(String(questionNumber)).child("options").child(self.optionVotesString.0).observeSingleEvent(of: .value, with: { snapshot in
+                let otherVotes = snapshot.value as? Int
+                let percentageOfVotes = Int((Double(votes) / Double((votes + otherVotes!)))*100)
+                self.presenter?.showVotesColor(percentageOfVotes: percentageOfVotes, backgroundColor: backgroundColor)
+                
+                print("Question set: ", questionNumber, "| Votes for chosen option: ", votes, "| Votes for other option: ", otherVotes!, "| Percentage", percentageOfVotes,"%")
+            })
+        } else {
+            self.database.child(String(questionNumber)).child("options").child(self.optionVotesString.1).observeSingleEvent(of: .value, with: { snapshot in
+                let otherVotes = snapshot.value as? Int
+                let percentageOfVotes = Int((Double(votes) / Double((votes + otherVotes!)))*100)
+                self.presenter?.showVotesColor(percentageOfVotes: percentageOfVotes, backgroundColor: backgroundColor)
+                
+                print("Question set: ", questionNumber, "| Votes for chosen option: ", votes, "| Votes for other option: ", otherVotes!, "| Percentage", percentageOfVotes,"%")
+            })
+        }
+    }
+    
 }

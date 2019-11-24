@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class MainPresenter {
     
@@ -16,6 +17,10 @@ class MainPresenter {
     
     func getNewQuestion(question: Question) {
         viewController?.getNewQuestion(question: question)
+    }
+    
+    func showVotesColor(percentageOfVotes: Int, backgroundColor: UIColor) {
+        viewController?.showVotesColor(percentageOfVotes: percentageOfVotes, backgroundColor: backgroundColor)
     }
     
 }
