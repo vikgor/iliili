@@ -19,8 +19,8 @@ class MainPresenter {
         viewController?.getNewQuestion(question: question)
     }
     
-    func showVotesColor(percentageOfVotes: Int, backgroundColor: UIColor) {
-        viewController?.showVotesColor(percentageOfVotes: percentageOfVotes, backgroundColor: backgroundColor)
+    func showVotesColor(percentageOfVotes: Int, backgroundColor: UIColor, otherBackgroundColor: UIColor) {
+        viewController?.showVotesColor(percentageOfVotes: percentageOfVotes, backgroundColor: backgroundColor, otherBackgroundColor: otherBackgroundColor)
     }
     
 }

@@ -29,28 +29,15 @@ class StartInteractor {
     
     func start() {
         presenter?.showLoading()
-        getStructFromJSON()
+        getQuestions()
     }
     
-    func convertDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void) {
-        Database.database().reference().child("questions").observeSingleEvent(of: .value, with: { snapshot in
-            guard let value = snapshot.value else { return }
-            do {
-                let jsonData = try JSONSerialization.data(withJSONObject: value, options: [])
-                let questions = try JSONDecoder().decode([Question].self, from: jsonData)
-                completion(questions)
-            } catch let error {
-                print(error)
-            }
-        })
-    }
-    
-    func getStructFromJSON() {
+    func getQuestions() {
         DispatchQueue.global(qos: .background).async {
             var questions: [Question]?
             if let url = URL(string: self.questionsList) {
                 do {
-                    print("reading from the server file")
+                    print("reading from the server")
                     let data = try Data(contentsOf: url as URL)
                     let decoder = JSONDecoder()
                     questions = try decoder.decode([Question].self, from: data)
@@ -67,12 +54,25 @@ class StartInteractor {
 //                }
                 
                 DispatchQueue.main.async {
-                    self.convertDatasnapshotToQuestion { (questions) in
+                    self.convertFirebaseDatasnapshotToQuestion { (questions) in
                         self.presenter?.receivedQuestions(questions: questions)
                     }
                 }
                 
             }
         }
+    }
+    
+    func convertFirebaseDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void) {
+        Database.database().reference().child("questions").observeSingleEvent(of: .value, with: { snapshot in
+            guard let value = snapshot.value else { return }
+            do {
+                let jsonData = try JSONSerialization.data(withJSONObject: value, options: [])
+                let questions = try JSONDecoder().decode([Question].self, from: jsonData)
+                completion(questions)
+            } catch let error {
+                print(error)
+            }
+        })
     }
 }

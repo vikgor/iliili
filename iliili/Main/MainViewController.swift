@@ -15,11 +15,11 @@ class MainViewController: UIViewController {
     
     @IBAction func option1(_ sender: UIButton) {
         animateButton(sender, rotationAngle: 69)
-        interactor?.getNewQuestion(questions: questions!, sender: option1)
+        interactor?.getNewQuestion(questions: questions!, sender: option1, otherOption: option2)
     }
     @IBAction func option2(_ sender: UIButton) {
         animateButton(sender, rotationAngle: -69)
-        interactor?.getNewQuestion(questions: questions!, sender: option2)
+        interactor?.getNewQuestion(questions: questions!, sender: option2, otherOption: option1)
     }
     @IBOutlet weak var iliLabel: UILabel!
     
@@ -68,17 +68,17 @@ class MainViewController: UIViewController {
     
     
     
-    func showVotesColor(percentageOfVotes: Int, backgroundColor: UIColor) {
+    func showVotesColor(percentageOfVotes: Int, backgroundColor: UIColor, otherBackgroundColor: UIColor) {
         
         let votesBackground = UIView(frame: CGRect(x: 0, y: self.view.bounds.size.height/2-25, width: self.view.bounds.size.width, height: 50))
-        votesBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0.8)
+        votesBackground.backgroundColor = otherBackgroundColor
         self.view.addSubview(votesBackground)
         votesBackground.layer.cornerRadius = 10
 //        votesBackground.layer.borderWidth = 0.5
 //        votesBackground.layer.borderColor = UIColor.white.withAlphaComponent(1.0).cgColor
         
         let votesColor = UIView(frame: CGRect(x: 0, y: self.view.bounds.size.height/2-25, width: 0, height: 50))
-        votesColor.backgroundColor = backgroundColor.withAlphaComponent(0.8)
+        votesColor.backgroundColor = backgroundColor
         self.view.addSubview(votesColor)
         votesColor.layer.cornerRadius = 10
         let votesWidth = CGFloat(percentageOfVotes)/100
@@ -100,18 +100,17 @@ class MainViewController: UIViewController {
         
         let seconds = 3.0
         DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-            self.hideVotesColor(votesBackground: votesBackground, votesColor: votesColor, backgroundColor: backgroundColor, votesPercentageLabel: votesPercentageLabel)
+            self.hideVotesColor(votesBackground: votesBackground, votesColor: votesColor, backgroundColor: backgroundColor, votesPercentageLabel: votesPercentageLabel, otherBackgroundColor: otherBackgroundColor)
         }
     }
     
-    func hideVotesColor(votesBackground: UIView, votesColor: UIView, backgroundColor: UIColor, votesPercentageLabel: UILabel) {
+    func hideVotesColor(votesBackground: UIView, votesColor: UIView, backgroundColor: UIColor, votesPercentageLabel: UILabel, otherBackgroundColor: UIColor) {
         UIView.animate(withDuration: 2.0) {
-            votesBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0)
+            votesBackground.backgroundColor = otherBackgroundColor.withAlphaComponent(0)
             votesColor.backgroundColor = backgroundColor.withAlphaComponent(0)
             
 //            votesBackground.layer.borderColor = UIColor.white.withAlphaComponent(0.0).cgColor
 //            votesBackground.layer.borderWidth = 0.0
-            
             
 //            votesPercentageLabel.font = votesPercentageLabel.font.withSize(0)
             votesPercentageLabel.alpha = 0
