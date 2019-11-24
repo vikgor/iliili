@@ -12,65 +12,65 @@ import FirebaseDatabase
 
 class MainInteractor {
     var presenter: MainPresenter?
-    var previousRandomQuestion: Int?
-    let optionVotesString = ("option1votes", "option2votes")
-    
+    var previousRandomQuestionNumber: Int?
+    let optionVotesTag = ("option1votes", "option2votes")
     let database = Database.database().reference().child("questions")
     
+    //Called only once
     func getNewQuestion(questions: [Question]) {
         let randomQuestion = Int.random(in: 0...(questions.count - 1))
-        let options = questions[randomQuestion]
-        previousRandomQuestion = randomQuestion
-        presenter?.getNewQuestion(question: options)
+        let question = questions[randomQuestion]
+        previousRandomQuestionNumber = randomQuestion
+        presenter?.getNewQuestion(question: question)
     }
+    
+    func getNewQuestion(questions: [Question], chosenOption: UIButton, otherOption: UIButton) {
+        let randomQuestionNumber = Int.random(in: 0...(questions.count - 1))
+        let question = questions[randomQuestionNumber]
         
-    func getNewQuestion(questions: [Question], sender: UIButton, otherOption: UIButton) {
-        let randomQuestion = Int.random(in: 0...(questions.count - 1))
-        let options = questions[randomQuestion]
-        
-        switch sender.tag {
+        switch chosenOption.tag {
         case 1:
-            sendVote(questionNumber: previousRandomQuestion!, optionVotes: optionVotesString.0, backgroundColor: sender.backgroundColor!, otherBackgroundColor: otherOption.backgroundColor!)
+            sendVote(questionNumber: previousRandomQuestionNumber!, optionVotesTag: optionVotesTag.0, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!)
             break;
         case 2:
-            sendVote(questionNumber: previousRandomQuestion!, optionVotes: optionVotesString.1, backgroundColor: sender.backgroundColor!, otherBackgroundColor: otherOption.backgroundColor!)
+            sendVote(questionNumber: previousRandomQuestionNumber!, optionVotesTag: optionVotesTag.1, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!)
             break;
         default: ()
         break;
         }
         
-        previousRandomQuestion = randomQuestion
-        presenter?.getNewQuestion(question: options)
+        previousRandomQuestionNumber = randomQuestionNumber
+        presenter?.getNewQuestion(question: question)
     }
     
-    func sendVote(questionNumber: Int, optionVotes: String, backgroundColor: UIColor, otherBackgroundColor: UIColor) {
-        database.child(String(questionNumber)).child("options").child(optionVotes).observeSingleEvent(of: .value, with: { snapshot in
+    func sendVote(questionNumber: Int, optionVotesTag: String, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
+        database.child(String(questionNumber)).child("options").child(optionVotesTag).observeSingleEvent(of: .value, with: { snapshot in
             var votes = snapshot.value as? Int
             votes! += 1
-            self.database.child(String(questionNumber)).child("options").child(optionVotes).setValue(votes)
-            self.getPercentage(optionVotes: optionVotes, questionNumber: questionNumber, votes: votes!, backgroundColor: backgroundColor, otherBackgroundColor: otherBackgroundColor)
-    })
-        
+            self.database.child(String(questionNumber)).child("options").child(optionVotesTag).setValue(votes)
+            self.countVotes(optionVotesTag: optionVotesTag, questionNumber: questionNumber, votes: votes!, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
+        })
     }
     
-    func getPercentage(optionVotes: String, questionNumber: Int, votes: Int, backgroundColor: UIColor, otherBackgroundColor: UIColor) {
-        if optionVotes != self.optionVotesString.0 {
-            self.database.child(String(questionNumber)).child("options").child(self.optionVotesString.0).observeSingleEvent(of: .value, with: { snapshot in
-                let otherVotes = snapshot.value as? Int
-                let percentageOfVotes = Int((Double(votes) / Double((votes + otherVotes!)))*100)
-                self.presenter?.showVotesColor(percentageOfVotes: percentageOfVotes, backgroundColor: backgroundColor, otherBackgroundColor: otherBackgroundColor)
-                
-                print("Question set: ", questionNumber, "| Votes for chosen option: ", votes, "| Votes for other option: ", otherVotes!, "| Percentage", percentageOfVotes,"%")
-            })
+    func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
+        if optionVotesTag != self.optionVotesTag.0 {
+            countVotesDependingOnTag(optionVotesTag: self.optionVotesTag.0, questionNumber: questionNumber, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
         } else {
-            self.database.child(String(questionNumber)).child("options").child(self.optionVotesString.1).observeSingleEvent(of: .value, with: { snapshot in
-                let otherVotes = snapshot.value as? Int
-                let percentageOfVotes = Int((Double(votes) / Double((votes + otherVotes!)))*100)
-                self.presenter?.showVotesColor(percentageOfVotes: percentageOfVotes, backgroundColor: backgroundColor, otherBackgroundColor: otherBackgroundColor)
-                
-                print("Question set: ", questionNumber, "| Votes for chosen option: ", votes, "| Votes for other option: ", otherVotes!, "| Percentage", percentageOfVotes,"%")
-            })
+            countVotesDependingOnTag(optionVotesTag: self.optionVotesTag.1, questionNumber: questionNumber, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
         }
+    }
+    
+    func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
+         self.database.child(String(questionNumber)).child("options").child(optionVotesTag).observeSingleEvent(of: .value, with: { snapshot in
+             self.getVotesPercentage(snapshot: snapshot, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor, questionNumber: questionNumber)
+         })
+    }
+    
+    func getVotesPercentage(snapshot: DataSnapshot, votes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor, questionNumber: Int) {
+        let otherVotes = snapshot.value as? Int
+        let percentageOfVotes = Int((Double(votes) / Double((votes + otherVotes!)))*100)
+        self.presenter?.showVotesAnimation(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
+        print("Question set: ", questionNumber, "| Votes for chosen option: ", votes, "| Votes for other option: ", otherVotes!, "| Percentage", percentageOfVotes,"%")
     }
     
 }

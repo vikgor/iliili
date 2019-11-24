@@ -12,16 +12,17 @@ class MainViewController: UIViewController {
     
     @IBOutlet weak var option1: UIButton!
     @IBOutlet weak var option2: UIButton!
+
+    @IBOutlet weak var iliLabel: UILabel!
     
     @IBAction func option1(_ sender: UIButton) {
         animateButton(sender, rotationAngle: 69)
-        interactor?.getNewQuestion(questions: questions!, sender: option1, otherOption: option2)
+        interactor?.getNewQuestion(questions: questions!, chosenOption: option1, otherOption: option2)
     }
     @IBAction func option2(_ sender: UIButton) {
         animateButton(sender, rotationAngle: -69)
-        interactor?.getNewQuestion(questions: questions!, sender: option2, otherOption: option1)
+        interactor?.getNewQuestion(questions: questions!, chosenOption: option2, otherOption: option1)
     }
-    @IBOutlet weak var iliLabel: UILabel!
     
     var interactor: MainInteractor?
     var questions: [Question]?
@@ -47,7 +48,7 @@ class MainViewController: UIViewController {
         option2.setTitle(question.options.option2, for: .normal)
     }
     
-    
+    //MARK: Button animation
     func animateButton(_ sender: UIButton, rotationAngle: Int) {
         UIButton.animate(withDuration: 0.2,
                          delay: 0,
@@ -61,24 +62,26 @@ class MainViewController: UIViewController {
         })
         hideIliLabel()
     }
+    //MARK: Do I need this?
+    func hideIliLabel() {
+        UILabel.animate(withDuration: 1.0) {
+            self.iliLabel.alpha = 0
+        }
+    }
     
     
-    
-    
-    
-    
-    
-    func showVotesColor(percentageOfVotes: Int, backgroundColor: UIColor, otherBackgroundColor: UIColor) {
+    //MARK: Show votes animations
+    func showVotesAnimation(percentageOfVotes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
         
         let votesBackground = UIView(frame: CGRect(x: 0, y: self.view.bounds.size.height/2-25, width: self.view.bounds.size.width, height: 50))
-        votesBackground.backgroundColor = otherBackgroundColor
+        votesBackground.backgroundColor = otherOptionBackgroundColor
         self.view.addSubview(votesBackground)
         votesBackground.layer.cornerRadius = 10
 //        votesBackground.layer.borderWidth = 0.5
 //        votesBackground.layer.borderColor = UIColor.white.withAlphaComponent(1.0).cgColor
         
         let votesColor = UIView(frame: CGRect(x: 0, y: self.view.bounds.size.height/2-25, width: 0, height: 50))
-        votesColor.backgroundColor = backgroundColor
+        votesColor.backgroundColor = chosenOptionBackgroundColor
         self.view.addSubview(votesColor)
         votesColor.layer.cornerRadius = 10
         let votesWidth = CGFloat(percentageOfVotes)/100
@@ -100,10 +103,11 @@ class MainViewController: UIViewController {
         
         let seconds = 3.0
         DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-            self.hideVotesColor(votesBackground: votesBackground, votesColor: votesColor, backgroundColor: backgroundColor, votesPercentageLabel: votesPercentageLabel, otherBackgroundColor: otherBackgroundColor)
+            self.hideVotesColor(votesBackground: votesBackground, votesColor: votesColor, backgroundColor: chosenOptionBackgroundColor, votesPercentageLabel: votesPercentageLabel, otherBackgroundColor: otherOptionBackgroundColor)
         }
     }
     
+    //MARK: Hide votes animations
     func hideVotesColor(votesBackground: UIView, votesColor: UIView, backgroundColor: UIColor, votesPercentageLabel: UILabel, otherBackgroundColor: UIColor) {
         UIView.animate(withDuration: 2.0) {
             votesBackground.backgroundColor = otherBackgroundColor.withAlphaComponent(0)
@@ -116,17 +120,9 @@ class MainViewController: UIViewController {
             votesPercentageLabel.alpha = 0
             
         }
-        
         print("Hiding the vote colors")
     }
     
-    
-    //MARK: Do I need this?
-    func hideIliLabel() {
-        UILabel.animate(withDuration: 1.0) {
-            self.iliLabel.alpha = 0
-        }
-    }
     
 }
 
