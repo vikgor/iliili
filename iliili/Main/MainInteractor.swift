@@ -48,19 +48,19 @@ class MainInteractor {
             var votes = snapshot.value as? Int
             votes! += 1
             self.database.child(String(questionNumber)).child("options").child(optionVotesTag).setValue(votes)
-            self.countVotes(optionVotesTag: optionVotesTag, questionNumber: questionNumber, votes: votes!, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
+            self.countVotesDependingOnTag(optionVotesTag: optionVotesTag, questionNumber: questionNumber, votes: votes!, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
         })
     }
     
-    func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
+    func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
         if optionVotesTag != self.optionVotesTag.0 {
-            countVotesDependingOnTag(optionVotesTag: self.optionVotesTag.0, questionNumber: questionNumber, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
+            countVotes(optionVotesTag: self.optionVotesTag.0, questionNumber: questionNumber, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
         } else {
-            countVotesDependingOnTag(optionVotesTag: self.optionVotesTag.1, questionNumber: questionNumber, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
+            countVotes(optionVotesTag: self.optionVotesTag.1, questionNumber: questionNumber, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
         }
     }
     
-    func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
+    func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
          self.database.child(String(questionNumber)).child("options").child(optionVotesTag).observeSingleEvent(of: .value, with: { snapshot in
              self.getVotesPercentage(snapshot: snapshot, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor, questionNumber: questionNumber)
          })
