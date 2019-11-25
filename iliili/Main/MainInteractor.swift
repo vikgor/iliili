@@ -53,10 +53,15 @@ class MainInteractor {
     }
     
     func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
-        if optionVotesTag != self.optionVotesTag.0 {
+        switch optionVotesTag {
+        case self.optionVotesTag.1:
             countVotes(optionVotesTag: self.optionVotesTag.0, questionNumber: questionNumber, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
-        } else {
+            break;
+        case self.optionVotesTag.0:
             countVotes(optionVotesTag: self.optionVotesTag.1, questionNumber: questionNumber, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
+            break;
+        default: ()
+        break;
         }
     }
     
