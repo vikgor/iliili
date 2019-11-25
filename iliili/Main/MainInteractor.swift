@@ -66,9 +66,9 @@ class MainInteractor {
     }
     
     func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
-         self.database.child(String(questionNumber)).child("options").child(optionVotesTag).observeSingleEvent(of: .value, with: { snapshot in
-             self.getVotesPercentage(snapshot: snapshot, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor, questionNumber: questionNumber)
-         })
+        self.database.child(String(questionNumber)).child("options").child(optionVotesTag).observeSingleEvent(of: .value, with: { snapshot in
+            self.getVotesPercentage(snapshot: snapshot, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor, questionNumber: questionNumber)
+        })
     }
     
     func getVotesPercentage(snapshot: DataSnapshot, votes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor, questionNumber: Int) {
