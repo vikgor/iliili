@@ -7,25 +7,28 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class MainViewController: UIViewController {
     
-    @IBOutlet weak var option1: UIButton!
-    @IBOutlet weak var option2: UIButton!
-
     @IBOutlet weak var iliLabel: UILabel!
     
+    @IBOutlet weak var option1: UIButton!
+    @IBOutlet weak var option2: UIButton!
     @IBAction func option1(_ sender: UIButton) {
         animateButton(sender, rotationAngle: 69)
-        interactor?.getNewQuestion(questions: questions!, chosenOption: option1, otherOption: option2)
+        interactor?.choseOption1(chosenOption: option1, otherOption: option2)
     }
     @IBAction func option2(_ sender: UIButton) {
         animateButton(sender, rotationAngle: -69)
-        interactor?.getNewQuestion(questions: questions!, chosenOption: option2, otherOption: option1)
+        interactor?.choseOption2(chosenOption: option2, otherOption: option1)
     }
     
     var interactor: MainInteractor?
-    var questions: [Question]?
+    
+    func start() {
+        interactor?.initQuestion()
+    }
     
     func setup() {
         let interactor = MainInteractor()
@@ -40,10 +43,11 @@ class MainViewController: UIViewController {
         setup()
         option1.tag = 1
         option2.tag = 2
-        interactor?.getNewQuestion(questions: questions!)
+        
+        interactor!.initQuestion()
     }
     
-    func getNewQuestion(question: Question) {
+    func showNewQuestionOnButtonLabels(question: Question) {
         option1.setTitle(question.options.option1, for: .normal)
         option2.setTitle(question.options.option2, for: .normal)
     }
@@ -62,7 +66,7 @@ class MainViewController: UIViewController {
         })
         hideIliLabel()
     }
-    //MARK: Do I need this?
+    //MARK: Hiding "ИЛИ"
     func hideIliLabel() {
         UILabel.animate(withDuration: 1.0) {
             self.iliLabel.alpha = 0
@@ -118,6 +122,21 @@ class MainViewController: UIViewController {
             votesPercentageLabel.alpha = 0
         }
         print("Hiding the vote colors")
+    }
+    
+    
+    //MARK: Loading
+    func showLoading() {
+        print("now calling showLoading")
+        let Indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
+        Indicator.label.text = "Загрузка"
+        Indicator.isUserInteractionEnabled = false
+        Indicator.detailsLabel.text = "Загружаем вопросы..."
+        Indicator.show(animated: true)
+    }
+    
+    func hideLoading() {
+        MBProgressHUD.hide(for: self.view, animated: true)
     }
     
 }

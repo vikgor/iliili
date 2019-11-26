@@ -20,6 +20,19 @@
 - [ ] Check if works without connection
 - [ ] Show the new question after the votes result animation 
 
+
+- [x] move questions downloading from start to main interactor (start() will initiate this) [StartInteractor.swift line 35]
+- [ ] 
+- [x] remove options from VC (getNewQuestion -> chosenOption1)
+- [x] MainInteractor declare var question: Question before functions
+- [ ] get rid of switch statement in interactor (use chosenOption1 and chosenOption2 instead)
+- [ ] previousRandomQuestionNumber can be declared before funcs as well - not really
+- [ ] 
+- [ ] animations remain in VC, but the logic behind which animation to use is in presenter
+- [ ] 
+- [ ] in getQuestions(), try to read the whole database (or the first/random N elements) simply by looping -> questions = [Question]
+- [x] fix iPhone X screens
+
 ## Optional:
 
 - [ ] Возможность добавлять свои варианты (UI, куда прикрутить такую кнопку?) для одобрения модератором

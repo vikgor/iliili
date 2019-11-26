@@ -13,10 +13,13 @@ class MainPresenter {
     
     weak var viewController: MainViewController?
     
-    var questions: Question?
+    func showLoading() {
+        viewController?.showLoading()
+    }
     
-    func getNewQuestion(question: Question) {
-        viewController?.getNewQuestion(question: question)
+    func showNewQuestion(question: Question) {
+        viewController?.hideLoading()
+        viewController?.showNewQuestionOnButtonLabels(question: question)
     }
     
     func showVotesAnimation(percentageOfVotes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
