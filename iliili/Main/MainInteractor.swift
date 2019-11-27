@@ -34,19 +34,19 @@ class MainInteractor {
     var questions: [Question]?
     var question: Question?
     
-    //try to read the first set of random questions into a local variable
-    var firstTenQuestion: [Question]?
+//    try to read the first set of random questions into a local variable
+//    var firstTenQuestion: [Question]?
     
     func initQuestion(){
         presenter?.showLoading()
-        getQuestions()
+        getQuestionsFromFirebase()
     }
     
-    func getQuestions() {
+    func getQuestionsFromFirebase() {
             DispatchQueue.global(qos: .background).async {
                 if let url = URL(string: self.questionsFirebase) {
                     do {
-                        //this doesn't really do anything yet since the link doesn't containt the JSON itself, therefore this do statement is skipped and is going straight to reading from local file
+                        //this do statement doesn't really do anything yet since the link doesn't containt the JSON itself, therefore it is going straight to catch - reading from local file
                         print("reading from the server")
                         let data = try Data(contentsOf: url as URL)
                         let decoder = JSONDecoder()
@@ -83,77 +83,79 @@ class MainInteractor {
         }
     
     
-    
-    func choseOption1(chosenOption: UIButton, otherOption: UIButton) {
-        getNewQuestion(questions: questions!, chosenOption: chosenOption, otherOption: otherOption)
-    }
-    
-    func choseOption2(chosenOption: UIButton, otherOption: UIButton) {
-        getNewQuestion(questions: questions!, chosenOption: chosenOption, otherOption: otherOption)
-    }
-    
     //Called only once
     func getNewQuestion(questions: [Question]) {
         randomQuestionNumber = Int.random(in: 0...(questions.count - 1))
         question = questions[randomQuestionNumber!]
-
         previousRandomQuestionNumber = randomQuestionNumber
         presenter?.showNewQuestion(question: question!)
     }
     
-    func getNewQuestion(questions: [Question], chosenOption: UIButton, otherOption: UIButton) {
+    func choseOption1(chosenOption: UIButton, otherOption: UIButton) {
+        getNewQuestion(questions: questions!, chosenOption: chosenOption, otherOption: otherOption, optionVotesStringTag: optionVotesTag.0)
+        
+    }
+    
+    func choseOption2(chosenOption: UIButton, otherOption: UIButton) {
+        getNewQuestion(questions: questions!, chosenOption: chosenOption, otherOption: otherOption, optionVotesStringTag: optionVotesTag.1)
+        
+    }
+    
+    func getNewQuestion(questions: [Question], chosenOption: UIButton, otherOption: UIButton, optionVotesStringTag: String) {
+        sendVote(questionNumber: previousRandomQuestionNumber!, chosenOption: chosenOption, otherOption: otherOption, optionVotesStringTag: optionVotesStringTag)
         randomQuestionNumber = Int.random(in: 0...(questions.count - 1))
         question = questions[randomQuestionNumber!]
-        
-        switch chosenOption.tag {
-        case 1:
-            sendVote(questionNumber: previousRandomQuestionNumber!, optionVotesTag: optionVotesTag.0, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!)
-            break;
-        case 2:
-            sendVote(questionNumber: previousRandomQuestionNumber!, optionVotesTag: optionVotesTag.1, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!)
-            break;
-        default: ()
-        break;
-        }
-        
         previousRandomQuestionNumber = randomQuestionNumber
         presenter?.showNewQuestion(question: question!)
     }
     
-    
-    
-    func sendVote(questionNumber: Int, optionVotesTag: String, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
-        database.child(String(questionNumber)).child("options").child(optionVotesTag).observeSingleEvent(of: .value, with: { snapshot in
+    func sendVote(questionNumber: Int, chosenOption: UIButton, otherOption: UIButton, optionVotesStringTag: String) {
+        database.child(String(questionNumber)).child("options").child(optionVotesStringTag).observeSingleEvent(of: .value, with: { snapshot in
             var votes = snapshot.value as? Int
             votes! += 1
-            self.database.child(String(questionNumber)).child("options").child(optionVotesTag).setValue(votes)
-            self.countVotesDependingOnTag(optionVotesTag: optionVotesTag, questionNumber: questionNumber, votes: votes!, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
+            self.database.child(String(questionNumber)).child("options").child(optionVotesStringTag).setValue(votes)
+            self.countVotesDependingOnTag(optionVotesTag: optionVotesStringTag, questionNumber: questionNumber, votes: votes!, chosenOption: chosenOption, otherOption: otherOption)
         })
     }
     
-    func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
+    func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOption: UIButton, otherOption: UIButton) {
         switch optionVotesTag {
         case self.optionVotesTag.1:
-            countVotes(optionVotesTag: self.optionVotesTag.0, questionNumber: questionNumber, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
+            countVotes(optionVotesTag: self.optionVotesTag.0, questionNumber: questionNumber, votes: votes, chosenOption: chosenOption, otherOption: otherOption)
             break;
         case self.optionVotesTag.0:
-            countVotes(optionVotesTag: self.optionVotesTag.1, questionNumber: questionNumber, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
+            countVotes(optionVotesTag: self.optionVotesTag.1, questionNumber: questionNumber, votes: votes, chosenOption: chosenOption, otherOption: otherOption)
             break;
         default: ()
         break;
         }
     }
     
-    func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
+    func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOption: UIButton, otherOption: UIButton) {
         self.database.child(String(questionNumber)).child("options").child(optionVotesTag).observeSingleEvent(of: .value, with: { snapshot in
-            self.getVotesPercentage(snapshot: snapshot, votes: votes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor, questionNumber: questionNumber)
+            self.getVotesPercentage(snapshot: snapshot, votes: votes, chosenOption: chosenOption, otherOption: otherOption, questionNumber: questionNumber, optionVotesTag: optionVotesTag)
         })
     }
     
-    func getVotesPercentage(snapshot: DataSnapshot, votes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor, questionNumber: Int) {
+    func getVotesPercentage(snapshot: DataSnapshot, votes: Int, chosenOption: UIButton, otherOption: UIButton, questionNumber: Int, optionVotesTag: String) {
         let otherVotes = snapshot.value as? Int
         let percentageOfVotes = Int((Double(votes) / Double((votes + otherVotes!)))*100)
-        self.presenter?.showVotesAnimation(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor)
+       
+        
+        
+        switch optionVotesTag {
+        case self.optionVotesTag.1:
+             self.presenter?.showVotesAnimation(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!, optionVotesTag: optionVotesTag)
+            break;
+        case self.optionVotesTag.0:
+             self.presenter?.showVotesAnimation2(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!, optionVotesTag: optionVotesTag)
+            break;
+        default: ()
+        break;
+        }
+        
+        
+        
         print("Question set: ", questionNumber, "| Votes for chosen option: ", votes, "| Votes for other option: ", otherVotes!, "| Percentage", percentageOfVotes,"%")
     }
     

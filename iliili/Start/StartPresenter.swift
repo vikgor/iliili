@@ -12,12 +12,7 @@ class StartPresenter {
     
     weak var viewController: StartViewController?
     
-//    func showLoading() {
-//        viewController?.showLoading()
-//    }
-    
     func showNextScreen() {
-//        viewController?.hideLoading()
         viewController?.showNextScreen()
     }
     

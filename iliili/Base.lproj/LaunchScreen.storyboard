@@ -23,9 +23,8 @@
                                 <rect key="frame" x="0.0" y="448" width="414" height="448"/>
                                 <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ИЛИ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Ip-gb-p3Y">
-                                <rect key="frame" x="143" y="412" width="126.99999999999997" height="72"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ИЛИ" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Ip-gb-p3Y">
+                                <rect key="frame" x="143.66666666666666" y="412" width="126.99999999999997" height="72"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="60"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -33,10 +32,12 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="1Ip-gb-p3Y" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="6EY-tM-bYa"/>
                             <constraint firstItem="rRs-h6-ffg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Lhv-jv-tPp"/>
                             <constraint firstAttribute="bottom" secondItem="s6b-JH-EKA" secondAttribute="bottom" id="Mg4-ZO-oev"/>
                             <constraint firstItem="s6b-JH-EKA" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="POm-A9-ahR"/>
                             <constraint firstItem="rRs-h6-ffg" firstAttribute="height" secondItem="Ze5-6b-2t3" secondAttribute="height" multiplier="1:2" id="gI9-Tw-Rsh"/>
+                            <constraint firstItem="1Ip-gb-p3Y" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="lYw-aB-IOV"/>
                             <constraint firstItem="rRs-h6-ffg" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="qUJ-hF-JR9"/>
                             <constraint firstItem="s6b-JH-EKA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="uBY-sf-TD4"/>
                             <constraint firstItem="rRs-h6-ffg" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="y3u-li-Pl4"/>
