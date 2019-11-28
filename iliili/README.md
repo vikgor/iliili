@@ -22,14 +22,11 @@
 
 
 - [x] move questions downloading from start to main interactor (start() will initiate this) [StartInteractor.swift line 35]
-- [ ] 
 - [x] remove options from VC (getNewQuestion -> chosenOption1)
 - [x] MainInteractor declare var question: Question before functions
 - [x] get rid of switch statement in interactor (use chosenOption1 and chosenOption2 instead)
 - [x] previousRandomQuestionNumber can be declared before funcs as well
-- [ ] 
-- [ ] animations remain in VC, but the logic behind which animation to use is in presenter
-- [ ] 
+- [x] animations remain in VC, but the logic behind which animation to use is in presenter
 - [ ] in getQuestions(), try to read the whole database (or the first/random N elements) simply by looping -> questions = [Question]
 - [x] fix iPhone X screens
 

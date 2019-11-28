@@ -145,7 +145,7 @@ class MainInteractor {
         
         switch optionVotesTag {
         case self.optionVotesTag.1:
-             self.presenter?.showVotesAnimation(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!, optionVotesTag: optionVotesTag)
+             self.presenter?.showVotesAnimation1(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!, optionVotesTag: optionVotesTag)
             break;
         case self.optionVotesTag.0:
              self.presenter?.showVotesAnimation2(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!, optionVotesTag: optionVotesTag)
