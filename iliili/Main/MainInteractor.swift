@@ -140,21 +140,17 @@ class MainInteractor {
     func getVotesPercentage(snapshot: DataSnapshot, votes: Int, chosenOption: UIButton, otherOption: UIButton, questionNumber: Int, optionVotesTag: String) {
         let otherVotes = snapshot.value as? Int
         let percentageOfVotes = Int((Double(votes) / Double((votes + otherVotes!)))*100)
-       
-        
         
         switch optionVotesTag {
         case self.optionVotesTag.1:
-             self.presenter?.showVotesAnimation1(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!, optionVotesTag: optionVotesTag)
+            self.presenter?.showVotesAnimation1(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!)
             break;
         case self.optionVotesTag.0:
-             self.presenter?.showVotesAnimation2(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!, optionVotesTag: optionVotesTag)
+            self.presenter?.showVotesAnimation2(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!)
             break;
         default: ()
         break;
         }
-        
-        
         
         print("Question set: ", questionNumber, "| Votes for chosen option: ", votes, "| Votes for other option: ", otherVotes!, "| Percentage", percentageOfVotes,"%")
     }

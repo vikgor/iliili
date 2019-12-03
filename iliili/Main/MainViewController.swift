@@ -16,10 +16,12 @@ class MainViewController: UIViewController {
     @IBOutlet weak var option1: UIButton!
     @IBOutlet weak var option2: UIButton!
     @IBAction func option1(_ sender: UIButton) {
+        option1.titleLabel?.textAlignment = .center
         animateButton(sender, rotationAngle: 69)
         interactor?.choseOption1(chosenOption: option1, otherOption: option2)
     }
     @IBAction func option2(_ sender: UIButton) {
+        option2.titleLabel?.textAlignment = .center
         animateButton(sender, rotationAngle: -69)
         interactor?.choseOption2(chosenOption: option2, otherOption: option1)
     }
@@ -87,7 +89,52 @@ class MainViewController: UIViewController {
         }
     }
     
-    func addVotesPercentageLabel(votesPercentageLabel: UILabel, percentageOfVotes: Int) {
+    //MARK: showVotesAnimation
+    func showVotesAnimation(percentageOfVotes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor, chosenVotesXPoint: CGFloat, chosenVotesXPointAnimate: CGFloat) {
+        let votesWidth = CGFloat(percentageOfVotes)/100
+        let otherVotes = UIView(frame: CGRect(x: 0,
+                                              y: self.view.bounds.size.height/2-25,
+                                              width: self.view.bounds.size.width,
+                                              height: 50))
+        let chosenVotes = UIView(frame: CGRect(x: chosenVotesXPoint,
+                                               y: self.view.bounds.size.height/2-25,
+                                               width: 0,
+                                               height: 50))
+        let votesPercentageLabel = UILabel(frame: CGRect(x: 0,
+                                                         y: 0,
+                                                         width: self.view.bounds.size.width,
+                                                         height: 50))
+        addOtherVotesViewProperties(otherVotes: otherVotes, otherOptionBackgroundColor: otherOptionBackgroundColor)
+        addChosenVotesViewProperties(chosenVotes: chosenVotes, chosenOptionBackgroundColor: chosenOptionBackgroundColor)
+        addVotesPercentageLabelProperties(votesPercentageLabel: votesPercentageLabel, percentageOfVotes: percentageOfVotes)
+
+        UIView.animate(withDuration: 2.0) {
+            chosenVotes.frame = CGRect(x: chosenVotesXPointAnimate,
+                                       y: self.view.bounds.size.height/2-25,
+                                       width: self.view.bounds.size.width * votesWidth,
+                                       height: 50)
+        }
+        
+        hideVotes(chosenVotes: chosenVotes, otherVotes: otherVotes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor, votesPercentageLabel: votesPercentageLabel)
+    }
+    
+    func addOtherVotesViewProperties(otherVotes: UIView, otherOptionBackgroundColor: UIColor) {
+        otherVotes.backgroundColor = otherOptionBackgroundColor
+        self.view.addSubview(otherVotes)
+        otherVotes.layer.cornerRadius = 10
+        otherVotes.layer.borderWidth = 0.3
+        otherVotes.layer.borderColor = UIColor.white.withAlphaComponent(1.0).cgColor
+    }
+    
+    func addChosenVotesViewProperties(chosenVotes: UIView, chosenOptionBackgroundColor: UIColor) {
+        chosenVotes.backgroundColor = chosenOptionBackgroundColor
+        self.view.addSubview(chosenVotes)
+        chosenVotes.layer.cornerRadius = 10
+        chosenVotes.layer.borderWidth = 0.3
+        chosenVotes.layer.borderColor = UIColor.white.withAlphaComponent(1.0).cgColor
+    }
+    
+    func addVotesPercentageLabelProperties(votesPercentageLabel: UILabel, percentageOfVotes: Int) {
         votesPercentageLabel.center = CGPoint(x: self.view.bounds.size.width/2, y: self.view.bounds.size.height/2)
         votesPercentageLabel.textColor = .white
         votesPercentageLabel.font = votesPercentageLabel.font.withSize(20)
@@ -95,86 +142,6 @@ class MainViewController: UIViewController {
         votesPercentageLabel.text = "С вами согласны \(percentageOfVotes)% пользователей"
         self.view.addSubview(votesPercentageLabel)
     }
-    
-    func addOtherVotesView(otherVotes: UIView, otherOptionBackgroundColor: UIColor) {
-        otherVotes.backgroundColor = otherOptionBackgroundColor
-        self.view.addSubview(otherVotes)
-        otherVotes.layer.cornerRadius = 10
-        otherVotes.layer.borderWidth = 0.5
-        otherVotes.layer.borderColor = UIColor.white.withAlphaComponent(1.0).cgColor
-    }
-    
-    func addChosenVotesView(chosenVotes: UIView, chosenOptionBackgroundColor: UIColor) {
-        chosenVotes.backgroundColor = chosenOptionBackgroundColor
-        self.view.addSubview(chosenVotes)
-        chosenVotes.layer.cornerRadius = 10
-        chosenVotes.layer.borderWidth = 0.5
-        chosenVotes.layer.borderColor = UIColor.white.withAlphaComponent(1.0).cgColor
-    }
-    
-    
-    //TODO: Rewrite this below
-    //MARK: showVotesAnimation
-    func showVotesAnimation1(percentageOfVotes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor, optionVotesTag: String) {
-        let votesWidth = CGFloat(percentageOfVotes)/100
-        let otherVotes = UIView(frame: CGRect(x: 0,
-                                              y: self.view.bounds.size.height/2-25,
-                                              width: self.view.bounds.size.width,
-                                              height: 50))
-        let chosenVotes = UIView(frame: CGRect(x: 0,
-                                               y: self.view.bounds.size.height/2-25,
-                                               width: 0,
-                                               height: 50))
-        let votesPercentageLabel = UILabel(frame: CGRect(x: 0,
-                                                         y: 0,
-                                                         width: self.view.bounds.size.width,
-                                                         height: 50))
-        addOtherVotesView(otherVotes: otherVotes, otherOptionBackgroundColor: otherOptionBackgroundColor)
-        addChosenVotesView(chosenVotes: chosenVotes, chosenOptionBackgroundColor: chosenOptionBackgroundColor)
-        addVotesPercentageLabel(votesPercentageLabel: votesPercentageLabel, percentageOfVotes: percentageOfVotes)
-        animate1(chosenVotes: chosenVotes, votesWidth: votesWidth)
-        hideVotes(chosenVotes: chosenVotes, otherVotes: otherVotes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor, votesPercentageLabel: votesPercentageLabel)
-    }
-    
-    func showVotesAnimation2(percentageOfVotes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor, optionVotesTag: String) {
-        let votesWidth = CGFloat(percentageOfVotes)/100
-        let otherVotes = UIView(frame: CGRect(x: 0,
-                                              y: self.view.bounds.size.height/2-25,
-                                              width: self.view.bounds.size.width,
-                                              height: 50))
-        let chosenVotes = UIView(frame: CGRect(x: self.view.bounds.size.width,
-                                               y: self.view.bounds.size.height/2-25,
-                                               width: 0,
-                                               height: 50))
-        let votesPercentageLabel = UILabel(frame: CGRect(x: 0,
-                                                         y: 0,
-                                                         width: self.view.bounds.size.width,
-                                                         height: 50))
-        addOtherVotesView(otherVotes: otherVotes, otherOptionBackgroundColor: otherOptionBackgroundColor)
-        addChosenVotesView(chosenVotes: chosenVotes, chosenOptionBackgroundColor: chosenOptionBackgroundColor)
-        addVotesPercentageLabel(votesPercentageLabel: votesPercentageLabel, percentageOfVotes: percentageOfVotes)
-        animate2(chosenVotes: chosenVotes, votesWidth: votesWidth)
-        hideVotes(chosenVotes: chosenVotes, otherVotes: otherVotes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor, votesPercentageLabel: votesPercentageLabel)
-    }
-    
-    
-    func animate1(chosenVotes: UIView, votesWidth: CGFloat) {
-        UIView.animate(withDuration: 2.0) {
-            chosenVotes.frame = CGRect(x: 0,
-                                       y: self.view.bounds.size.height/2-25,
-                                       width: self.view.bounds.size.width * votesWidth,
-                                       height: 50)
-        }
-    }
-    func animate2(chosenVotes: UIView, votesWidth: CGFloat) {
-        UIView.animate(withDuration: 2.0) {
-            chosenVotes.frame = CGRect(x: self.view.bounds.size.width * (1 - votesWidth),
-                                       y: self.view.bounds.size.height/2-25,
-                                       width: self.view.bounds.size.width * votesWidth,
-                                       height: 50)
-        }
-    }
-    
     
     //MARK: Hide votes animations
     func hideVotes(chosenVotes: UIView, otherVotes: UIView, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor, votesPercentageLabel: UILabel) {
