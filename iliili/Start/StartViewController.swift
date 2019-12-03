@@ -37,7 +37,7 @@ class StartViewController: UIViewController {
     func showNextScreen() {
         DispatchQueue.main.async {
             let vc = self.storyboard?.instantiateViewController(identifier: "mainView") as! MainViewController
-            vc.start()
+            vc.initQuestion()
             vc.modalPresentationStyle = UIModalPresentationStyle.fullScreen
             self.present(vc, animated:true, completion:nil)
         }

@@ -34,10 +34,10 @@ class MainInteractor {
     var questions: [Question]?
     var question: Question?
     
-//    try to read the first set of random questions into a local variable
+    //TODO: try to read the first set of random questions into a local variable
 //    var firstTenQuestion: [Question]?
     
-    func initQuestion(){
+    func initQuestion() {
         presenter?.showLoading()
         getQuestionsFromFirebase()
     }
@@ -91,14 +91,12 @@ class MainInteractor {
         presenter?.showNewQuestion(question: question!)
     }
     
-    func choseOption1(chosenOption: UIButton, otherOption: UIButton) {
+    func chooseOption1(chosenOption: UIButton, otherOption: UIButton) {
         getNewQuestion(questions: questions!, chosenOption: chosenOption, otherOption: otherOption, optionVotesStringTag: optionVotesTag.0)
-        
     }
     
-    func choseOption2(chosenOption: UIButton, otherOption: UIButton) {
+    func chooseOption2(chosenOption: UIButton, otherOption: UIButton) {
         getNewQuestion(questions: questions!, chosenOption: chosenOption, otherOption: otherOption, optionVotesStringTag: optionVotesTag.1)
-        
     }
     
     func getNewQuestion(questions: [Question], chosenOption: UIButton, otherOption: UIButton, optionVotesStringTag: String) {
@@ -143,10 +141,10 @@ class MainInteractor {
         
         switch optionVotesTag {
         case self.optionVotesTag.1:
-            self.presenter?.showVotesAnimation1(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!)
+            self.presenter?.showVotesAnimationOption1(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!)
             break;
         case self.optionVotesTag.0:
-            self.presenter?.showVotesAnimation2(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!)
+            self.presenter?.showVotesAnimationOption2(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!)
             break;
         default: ()
         break;

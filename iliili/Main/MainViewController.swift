@@ -18,18 +18,25 @@ class MainViewController: UIViewController {
     @IBAction func option1(_ sender: UIButton) {
         option1.titleLabel?.textAlignment = .center
         animateButton(sender, rotationAngle: 69)
-        interactor?.choseOption1(chosenOption: option1, otherOption: option2)
+        interactor?.chooseOption1(chosenOption: option1, otherOption: option2)
     }
     @IBAction func option2(_ sender: UIButton) {
         option2.titleLabel?.textAlignment = .center
         animateButton(sender, rotationAngle: -69)
-        interactor?.choseOption2(chosenOption: option2, otherOption: option1)
+        interactor?.chooseOption2(chosenOption: option2, otherOption: option1)
+    }
+    
+    func showNewQuestionOnButtonLabels(question: Question) {
+        option1.setTitle(question.options.option1, for: .normal)
+        option2.setTitle(question.options.option2, for: .normal)
     }
     
     var interactor: MainInteractor?
     
-    func start() {
-        interactor?.initQuestion()
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setup()
+        initQuestion()
     }
     
     func setup() {
@@ -40,21 +47,11 @@ class MainViewController: UIViewController {
         presenter.viewController = self
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setup()
-        option1.tag = 1
-        option2.tag = 2
-        
-        interactor!.initQuestion()
+    func initQuestion() {
+        interactor?.initQuestion()
     }
     
-    func showNewQuestionOnButtonLabels(question: Question) {
-        option1.setTitle(question.options.option1, for: .normal)
-        option2.setTitle(question.options.option2, for: .normal)
-    }
-    
-    //MARK: Loading
+    //MARK: Loading view
     func showLoading() {
         print("now calling showLoading")
         let Indicator = MBProgressHUD.showAdded(to: self.view, animated: true)
@@ -82,7 +79,7 @@ class MainViewController: UIViewController {
         })
         hideIliLabel()
     }
-    //MARK: Hiding "ИЛИ"
+    
     func hideIliLabel() {
         UILabel.animate(withDuration: 1.0) {
             self.iliLabel.alpha = 0

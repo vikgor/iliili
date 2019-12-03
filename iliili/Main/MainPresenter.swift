@@ -22,12 +22,12 @@ class MainPresenter {
         viewController?.showNewQuestionOnButtonLabels(question: question)
     }
     
-    func showVotesAnimation1(percentageOfVotes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
+    func showVotesAnimationOption1(percentageOfVotes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
         let chosenVotesXPoint: CGFloat = 0
         let chosenVotesXPointAnimate: CGFloat = 0
         viewController?.showVotesAnimation(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor, chosenVotesXPoint: chosenVotesXPoint, chosenVotesXPointAnimate: chosenVotesXPointAnimate)
     }
-    func showVotesAnimation2(percentageOfVotes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
+    func showVotesAnimationOption2(percentageOfVotes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
         let chosenVotesXPoint = viewController?.view.bounds.size.width
         let chosenVotesXPointAnimate = (viewController?.view.bounds.size.width)! * (1 - CGFloat(percentageOfVotes)/100)
         viewController?.showVotesAnimation(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor, chosenVotesXPoint: chosenVotesXPoint!, chosenVotesXPointAnimate: chosenVotesXPointAnimate)
