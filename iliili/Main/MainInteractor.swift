@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import UIKit
 import FirebaseDatabase
 
 struct Question: Codable {
@@ -46,7 +45,8 @@ class MainInteractor {
             DispatchQueue.global(qos: .background).async {
                 if let url = URL(string: self.questionsFirebase) {
                     do {
-                        //this do statement doesn't really do anything yet since the link doesn't containt the JSON itself, therefore it is going straight to catch - reading from local file
+                        //this do statement doesn't really do anything yet since the link doesn't containt the JSON
+                        //therefore it is going straight to catch - reading from local file
                         print("reading from the server")
                         let data = try Data(contentsOf: url as URL)
                         let decoder = JSONDecoder()
@@ -82,7 +82,6 @@ class MainInteractor {
             })
         }
     
-    
     //Called only once
     func getNewQuestion(questions: [Question]) {
         randomQuestionNumber = Int.random(in: 0...(questions.count - 1))
@@ -91,66 +90,83 @@ class MainInteractor {
         presenter?.showNewQuestion(question: question!)
     }
     
-    func chooseOption1(chosenOption: UIButton, otherOption: UIButton) {
-        getNewQuestion(questions: questions!, chosenOption: chosenOption, otherOption: otherOption, optionVotesStringTag: optionVotesTag.0)
+    func chooseOption1() {
+        getNewQuestion(questions: questions!,
+                       optionVotesStringTag: optionVotesTag.0)
     }
     
-    func chooseOption2(chosenOption: UIButton, otherOption: UIButton) {
-        getNewQuestion(questions: questions!, chosenOption: chosenOption, otherOption: otherOption, optionVotesStringTag: optionVotesTag.1)
+    func chooseOption2() {
+        getNewQuestion(questions: questions!,
+                       optionVotesStringTag: optionVotesTag.1)
     }
     
-    func getNewQuestion(questions: [Question], chosenOption: UIButton, otherOption: UIButton, optionVotesStringTag: String) {
-        sendVote(questionNumber: previousRandomQuestionNumber!, chosenOption: chosenOption, otherOption: otherOption, optionVotesStringTag: optionVotesStringTag)
+    func getNewQuestion(questions: [Question], optionVotesStringTag: String) {
+        sendVote(questionNumber: previousRandomQuestionNumber!, optionVotesStringTag: optionVotesStringTag)
         randomQuestionNumber = Int.random(in: 0...(questions.count - 1))
         question = questions[randomQuestionNumber!]
         previousRandomQuestionNumber = randomQuestionNumber
         presenter?.showNewQuestion(question: question!)
     }
     
-    func sendVote(questionNumber: Int, chosenOption: UIButton, otherOption: UIButton, optionVotesStringTag: String) {
+    func sendVote(questionNumber: Int, optionVotesStringTag: String) {
         database.child(String(questionNumber)).child("options").child(optionVotesStringTag).observeSingleEvent(of: .value, with: { snapshot in
             var votes = snapshot.value as? Int
             votes! += 1
             self.database.child(String(questionNumber)).child("options").child(optionVotesStringTag).setValue(votes)
-            self.countVotesDependingOnTag(optionVotesTag: optionVotesStringTag, questionNumber: questionNumber, votes: votes!, chosenOption: chosenOption, otherOption: otherOption)
+            self.countVotesDependingOnTag(optionVotesTag: optionVotesStringTag,
+                                          questionNumber: questionNumber,
+                                          votes: votes!)
         })
     }
     
-    func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOption: UIButton, otherOption: UIButton) {
+    func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int) {
         switch optionVotesTag {
         case self.optionVotesTag.1:
-            countVotes(optionVotesTag: self.optionVotesTag.0, questionNumber: questionNumber, votes: votes, chosenOption: chosenOption, otherOption: otherOption)
+            countVotes(optionVotesTag: self.optionVotesTag.0,
+                       questionNumber: questionNumber,
+                       votes: votes)
             break;
         case self.optionVotesTag.0:
-            countVotes(optionVotesTag: self.optionVotesTag.1, questionNumber: questionNumber, votes: votes, chosenOption: chosenOption, otherOption: otherOption)
+            countVotes(optionVotesTag: self.optionVotesTag.1,
+                       questionNumber: questionNumber,
+                       votes: votes)
             break;
         default: ()
         break;
         }
     }
     
-    func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int, chosenOption: UIButton, otherOption: UIButton) {
+    func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int) {
         self.database.child(String(questionNumber)).child("options").child(optionVotesTag).observeSingleEvent(of: .value, with: { snapshot in
-            self.getVotesPercentage(snapshot: snapshot, votes: votes, chosenOption: chosenOption, otherOption: otherOption, questionNumber: questionNumber, optionVotesTag: optionVotesTag)
+            self.getVotesPercentage(snapshot: snapshot,
+                                    votes: votes,
+                                    questionNumber: questionNumber,
+                                    optionVotesTag: optionVotesTag)
         })
     }
     
-    func getVotesPercentage(snapshot: DataSnapshot, votes: Int, chosenOption: UIButton, otherOption: UIButton, questionNumber: Int, optionVotesTag: String) {
+    func getVotesPercentage(snapshot: DataSnapshot,
+                            votes: Int,
+                            questionNumber: Int,
+                            optionVotesTag: String) {
         let otherVotes = snapshot.value as? Int
         let percentageOfVotes = Int((Double(votes) / Double((votes + otherVotes!)))*100)
         
         switch optionVotesTag {
         case self.optionVotesTag.1:
-            self.presenter?.showVotesAnimationOption1(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!)
+            self.presenter?.showVotesAnimationOption1(percentageOfVotes: percentageOfVotes)
             break;
         case self.optionVotesTag.0:
-            self.presenter?.showVotesAnimationOption2(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOption.backgroundColor!, otherOptionBackgroundColor: otherOption.backgroundColor!)
+            self.presenter?.showVotesAnimationOption2(percentageOfVotes: percentageOfVotes)
             break;
         default: ()
         break;
         }
         
-        print("Question set: ", questionNumber, "| Votes for chosen option: ", votes, "| Votes for other option: ", otherVotes!, "| Percentage", percentageOfVotes,"%")
+        print("Question set: ", questionNumber,
+              "| Votes for chosen option: ", votes,
+              "| Votes for other option: ", otherVotes!,
+              "| Percentage", percentageOfVotes,"%")
     }
     
 }

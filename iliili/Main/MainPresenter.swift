@@ -22,14 +22,26 @@ class MainPresenter {
         viewController?.showNewQuestionOnButtonLabels(question: question)
     }
     
-    func showVotesAnimationOption1(percentageOfVotes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
+    func showVotesAnimationOption1(percentageOfVotes: Int) {
         let chosenVotesXPoint: CGFloat = 0
         let chosenVotesXPointAnimate: CGFloat = 0
-        viewController?.showVotesAnimation(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor, chosenVotesXPoint: chosenVotesXPoint, chosenVotesXPointAnimate: chosenVotesXPointAnimate)
+        let otherOptionBackgroundColor = UIColor.systemGreen
+        let chosenOptionBackgroundColor = UIColor.systemOrange
+        viewController?.showVotesAnimation(percentageOfVotes: percentageOfVotes,
+                                           chosenOptionBackgroundColor: chosenOptionBackgroundColor,
+                                           otherOptionBackgroundColor: otherOptionBackgroundColor,
+                                           chosenVotesXPoint: chosenVotesXPoint,
+                                           chosenVotesXPointAnimate: chosenVotesXPointAnimate)
     }
-    func showVotesAnimationOption2(percentageOfVotes: Int, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor) {
+    func showVotesAnimationOption2(percentageOfVotes: Int) {
         let chosenVotesXPoint = viewController?.view.bounds.size.width
         let chosenVotesXPointAnimate = (viewController?.view.bounds.size.width)! * (1 - CGFloat(percentageOfVotes)/100)
-        viewController?.showVotesAnimation(percentageOfVotes: percentageOfVotes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor, chosenVotesXPoint: chosenVotesXPoint!, chosenVotesXPointAnimate: chosenVotesXPointAnimate)
+        let otherOptionBackgroundColor = UIColor.systemOrange
+        let chosenOptionBackgroundColor = UIColor.systemGreen
+        viewController?.showVotesAnimation(percentageOfVotes: percentageOfVotes,
+                                           chosenOptionBackgroundColor: chosenOptionBackgroundColor,
+                                           otherOptionBackgroundColor: otherOptionBackgroundColor,
+                                           chosenVotesXPoint: chosenVotesXPoint!,
+                                           chosenVotesXPointAnimate: chosenVotesXPointAnimate)
     }
 }

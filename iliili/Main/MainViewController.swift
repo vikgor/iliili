@@ -18,12 +18,12 @@ class MainViewController: UIViewController {
     @IBAction func option1(_ sender: UIButton) {
         option1.titleLabel?.textAlignment = .center
         animateButton(sender, rotationAngle: 69)
-        interactor?.chooseOption1(chosenOption: option1, otherOption: option2)
+        interactor?.chooseOption1()
     }
     @IBAction func option2(_ sender: UIButton) {
         option2.titleLabel?.textAlignment = .center
         animateButton(sender, rotationAngle: -69)
-        interactor?.chooseOption2(chosenOption: option2, otherOption: option1)
+        interactor?.chooseOption2()
     }
     
     func showNewQuestionOnButtonLabels(question: Question) {
@@ -112,7 +112,7 @@ class MainViewController: UIViewController {
                                        height: 50)
         }
         
-        hideVotes(chosenVotes: chosenVotes, otherVotes: otherVotes, chosenOptionBackgroundColor: chosenOptionBackgroundColor, otherOptionBackgroundColor: otherOptionBackgroundColor, votesPercentageLabel: votesPercentageLabel)
+        hideVotes(chosenVotes: chosenVotes, otherVotes: otherVotes, votesPercentageLabel: votesPercentageLabel)
     }
     
     func addOtherVotesViewProperties(otherVotes: UIView, otherOptionBackgroundColor: UIColor) {
@@ -141,7 +141,7 @@ class MainViewController: UIViewController {
     }
     
     //MARK: Hide votes animations
-    func hideVotes(chosenVotes: UIView, otherVotes: UIView, chosenOptionBackgroundColor: UIColor, otherOptionBackgroundColor: UIColor, votesPercentageLabel: UILabel) {
+    func hideVotes(chosenVotes: UIView, otherVotes: UIView, votesPercentageLabel: UILabel) {
         let timeWaitingToHide = 3.0
         DispatchQueue.main.asyncAfter(deadline: .now() + timeWaitingToHide) {
             UIView.animate(withDuration: 2.0) {
