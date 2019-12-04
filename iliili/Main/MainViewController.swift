@@ -11,24 +11,24 @@ import MBProgressHUD
 
 class MainViewController: UIViewController {
     
-    @IBOutlet weak var iliLabel: UILabel!
+    @IBOutlet weak var iliLabel: UILabel?
     
-    @IBOutlet weak var option1: UIButton!
-    @IBOutlet weak var option2: UIButton!
+    @IBOutlet weak var option1: UIButton?
+    @IBOutlet weak var option2: UIButton?
     @IBAction func option1(_ sender: UIButton) {
-        option1.titleLabel?.textAlignment = .center
+        option1?.titleLabel?.textAlignment = .center
         animateButton(sender, rotationAngle: 69)
         interactor?.chooseOption1()
     }
     @IBAction func option2(_ sender: UIButton) {
-        option2.titleLabel?.textAlignment = .center
+        option2?.titleLabel?.textAlignment = .center
         animateButton(sender, rotationAngle: -69)
         interactor?.chooseOption2()
     }
     
     func showNewQuestionOnButtonLabels(question: Question) {
-        option1.setTitle(question.options.option1, for: .normal)
-        option2.setTitle(question.options.option2, for: .normal)
+        option1?.setTitle(question.options.option1, for: .normal)
+        option2?.setTitle(question.options.option2, for: .normal)
     }
     
     var interactor: MainInteractor?
@@ -82,7 +82,7 @@ class MainViewController: UIViewController {
     
     func hideIliLabel() {
         UILabel.animate(withDuration: 1.0) {
-            self.iliLabel.alpha = 0
+            self.iliLabel?.alpha = 0
         }
     }
     

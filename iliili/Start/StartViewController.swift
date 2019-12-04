@@ -10,14 +10,14 @@ import UIKit
 import MBProgressHUD
 
 class StartViewController: UIViewController {
-    @IBOutlet weak var startButton: UIButton!
+    @IBOutlet weak var startButton: UIButton?
     
     var interactor: StartInteractor?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        startButton.addTarget(self,
+        startButton?.addTarget(self,
                               action: #selector(startGame),
                               for: .touchUpInside)
     }
@@ -36,10 +36,11 @@ class StartViewController: UIViewController {
     
     func showNextScreen() {
         DispatchQueue.main.async {
-            let vc = self.storyboard?.instantiateViewController(identifier: "mainView") as! MainViewController
+            if let vc = self.storyboard?.instantiateViewController(identifier: "mainView") as? MainViewController {
             vc.initQuestion()
             vc.modalPresentationStyle = UIModalPresentationStyle.fullScreen
             self.present(vc, animated:true, completion:nil)
+            }
         }
     }
 }

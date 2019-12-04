@@ -34,14 +34,16 @@ class MainPresenter {
                                            chosenVotesXPointAnimate: chosenVotesXPointAnimate)
     }
     func showVotesAnimationOption2(percentageOfVotes: Int) {
-        let chosenVotesXPoint = viewController?.view.bounds.size.width
-        let chosenVotesXPointAnimate = (viewController?.view.bounds.size.width)! * (1 - CGFloat(percentageOfVotes)/100)
-        let otherOptionBackgroundColor = UIColor.systemOrange
-        let chosenOptionBackgroundColor = UIColor.systemGreen
-        viewController?.showVotesAnimation(percentageOfVotes: percentageOfVotes,
-                                           chosenOptionBackgroundColor: chosenOptionBackgroundColor,
-                                           otherOptionBackgroundColor: otherOptionBackgroundColor,
-                                           chosenVotesXPoint: chosenVotesXPoint!,
-                                           chosenVotesXPointAnimate: chosenVotesXPointAnimate)
+        if let viewWidth = viewController?.view.bounds.size.width {
+            let chosenVotesXPoint = viewWidth
+            let chosenVotesXPointAnimate = viewWidth * (1 - CGFloat(percentageOfVotes)/100)
+            let otherOptionBackgroundColor = UIColor.systemOrange
+            let chosenOptionBackgroundColor = UIColor.systemGreen
+            viewController?.showVotesAnimation(percentageOfVotes: percentageOfVotes,
+                                               chosenOptionBackgroundColor: chosenOptionBackgroundColor,
+                                               otherOptionBackgroundColor: otherOptionBackgroundColor,
+                                               chosenVotesXPoint: chosenVotesXPoint,
+                                               chosenVotesXPointAnimate: chosenVotesXPointAnimate)
+        }
     }
 }

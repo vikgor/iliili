@@ -34,7 +34,7 @@ class MainInteractor {
     var question: Question?
     
     //TODO: try to read the first set of random questions into a local variable
-//    var firstTenQuestion: [Question]?
+    //    var firstTenQuestion: [Question]?
     
     func initQuestion() {
         presenter?.showLoading()
@@ -42,79 +42,80 @@ class MainInteractor {
     }
     
     func getQuestionsFromFirebase() {
-            DispatchQueue.global(qos: .background).async {
-                if let url = URL(string: self.questionsFirebase) {
-                    do {
-                        print("reading from the server")
-                        _ = try Data(contentsOf: url as URL)
-                        
-                        DispatchQueue.main.async {
-                            self.convertFirebaseDatasnapshotToQuestion { (questions) in
-                                self.getNewQuestion(questions: questions)
-                            }
+        DispatchQueue.global(qos: .background).async {
+            if let url = URL(string: self.questionsFirebase) {
+                do {
+                    print("reading from the server")
+                    _ = try Data(contentsOf: url as URL)
+                    
+                    DispatchQueue.main.async {
+                        self.convertFirebaseDatasnapshotToQuestion { (questions) in
+                            self.getNewQuestion()
                         }
-                    } catch {
-                        print("reading from the local file")
-                        let url = Bundle.main.url(forResource: "questions", withExtension: "json")!
-                        let data = try! Data(contentsOf: url)
-                        let decoder = JSONDecoder()
-                        self.questions = try! decoder.decode([Question].self, from: data)
-                        
-                        DispatchQueue.main.async {
-                            self.getNewQuestion(questions: self.questions!)
-                        }
+                    }
+                } catch {
+                    print("reading from the local file")
+                    let url = Bundle.main.url(forResource: "questions", withExtension: "json")!
+                    let data = try! Data(contentsOf: url)
+                    let decoder = JSONDecoder()
+                    self.questions = try! decoder.decode([Question].self, from: data)
+                    
+                    DispatchQueue.main.async {
+                        self.getNewQuestion()
                     }
                 }
             }
         }
-        
-        func convertFirebaseDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void) {
-            Database.database().reference().child("questions").observeSingleEvent(of: .value, with: { snapshot in
-                guard let value = snapshot.value else { return }
-                do {
-                    let jsonData = try JSONSerialization.data(withJSONObject: value, options: [])
-                    self.questions = try JSONDecoder().decode([Question].self, from: jsonData)
-                    completion(self.questions!)
-                } catch let error {
-                    print(error)
-                }
-            })
-        }
+    }
     
-    //Called only once
-    func getNewQuestion(questions: [Question]) {
-        randomQuestionNumber = Int.random(in: 0...(questions.count - 1))
-        question = questions[randomQuestionNumber!]
+    func convertFirebaseDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void) {
+        database.observeSingleEvent(of: .value, with: { snapshot in
+            guard let value = snapshot.value else { return }
+            do {
+                let jsonData = try JSONSerialization.data(withJSONObject: value, options: [])
+                self.questions = try JSONDecoder().decode([Question].self, from: jsonData)
+                completion(self.questions!)
+            } catch let error {
+                print(error)
+            }
+        })
+    }
+    
+    //Called only once, on the view load
+    func getNewQuestion() {
+        randomQuestionNumber = Int.random(in: 0...(questions!.count - 1))
+        question = questions?[randomQuestionNumber!]
         previousRandomQuestionNumber = randomQuestionNumber
         presenter?.showNewQuestion(question: question!)
     }
     
     func chooseOption1() {
-        getNewQuestion(questions: questions!,
-                       optionVotesStringTag: optionVotesTag.0)
+        getNewQuestion(optionVotesStringTag: optionVotesTag.0)
     }
     
     func chooseOption2() {
-        getNewQuestion(questions: questions!,
-                       optionVotesStringTag: optionVotesTag.1)
+        getNewQuestion(optionVotesStringTag: optionVotesTag.1)
     }
     
-    func getNewQuestion(questions: [Question], optionVotesStringTag: String) {
+    //MARK: New question
+    func getNewQuestion(optionVotesStringTag: String) {
         sendVote(questionNumber: previousRandomQuestionNumber!, optionVotesStringTag: optionVotesStringTag)
-        randomQuestionNumber = Int.random(in: 0...(questions.count - 1))
-        question = questions[randomQuestionNumber!]
+        randomQuestionNumber = Int.random(in: 0...(questions!.count - 1))
+        question = questions?[randomQuestionNumber!]
         previousRandomQuestionNumber = randomQuestionNumber
         presenter?.showNewQuestion(question: question!)
     }
     
+    //MARK: Vote
     func sendVote(questionNumber: Int, optionVotesStringTag: String) {
         database.child(String(questionNumber)).child("options").child(optionVotesStringTag).observeSingleEvent(of: .value, with: { snapshot in
-            var votes = snapshot.value as? Int
-            votes! += 1
-            self.database.child(String(questionNumber)).child("options").child(optionVotesStringTag).setValue(votes)
-            self.countVotesDependingOnTag(optionVotesTag: optionVotesStringTag,
-                                          questionNumber: questionNumber,
-                                          votes: votes!)
+            if var votes = snapshot.value as? Int {
+                votes += 1
+                self.database.child(String(questionNumber)).child("options").child(optionVotesStringTag).setValue(votes)
+                self.countVotesDependingOnTag(optionVotesTag: optionVotesStringTag,
+                                              questionNumber: questionNumber,
+                                              votes: votes)
+            }
         })
     }
     
@@ -148,24 +149,25 @@ class MainInteractor {
                             votes: Int,
                             questionNumber: Int,
                             optionVotesTag: String) {
-        let otherVotes = snapshot.value as? Int
-        let percentageOfVotes = Int((Double(votes) / Double((votes + otherVotes!)))*100)
-        
-        switch optionVotesTag {
-        case self.optionVotesTag.1:
-            self.presenter?.showVotesAnimationOption1(percentageOfVotes: percentageOfVotes)
+        if let otherVotes = snapshot.value as? Int {
+            let percentageOfVotes = Int((Double(votes) / Double((votes + otherVotes)))*100)
+            
+            switch optionVotesTag {
+            case self.optionVotesTag.1:
+                self.presenter?.showVotesAnimationOption1(percentageOfVotes: percentageOfVotes)
+                break;
+            case self.optionVotesTag.0:
+                self.presenter?.showVotesAnimationOption2(percentageOfVotes: percentageOfVotes)
+                break;
+            default: ()
             break;
-        case self.optionVotesTag.0:
-            self.presenter?.showVotesAnimationOption2(percentageOfVotes: percentageOfVotes)
-            break;
-        default: ()
-        break;
+            }
+            
+            print("Question set: ", questionNumber,
+                  "| Votes for chosen option: ", votes,
+                  "| Votes for other option: ", otherVotes,
+                  "| Percentage", percentageOfVotes,"%")
         }
-        
-        print("Question set: ", questionNumber,
-              "| Votes for chosen option: ", votes,
-              "| Votes for other option: ", otherVotes!,
-              "| Percentage", percentageOfVotes,"%")
     }
     
 }
