@@ -45,26 +45,25 @@ class MainInteractor {
             DispatchQueue.global(qos: .background).async {
                 if let url = URL(string: self.questionsFirebase) {
                     do {
-                        //this do statement doesn't really do anything yet since the link doesn't containt the JSON
-                        //therefore it is going straight to catch - reading from local file
                         print("reading from the server")
-                        let data = try Data(contentsOf: url as URL)
-                        let decoder = JSONDecoder()
-                        self.questions = try decoder.decode([Question].self, from: data)
+                        _ = try Data(contentsOf: url as URL)
+                        
+                        DispatchQueue.main.async {
+                            self.convertFirebaseDatasnapshotToQuestion { (questions) in
+                                self.getNewQuestion(questions: questions)
+                            }
+                        }
                     } catch {
                         print("reading from the local file")
                         let url = Bundle.main.url(forResource: "questions", withExtension: "json")!
                         let data = try! Data(contentsOf: url)
                         let decoder = JSONDecoder()
                         self.questions = try! decoder.decode([Question].self, from: data)
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.convertFirebaseDatasnapshotToQuestion { (questions) in
-                            self.getNewQuestion(questions: questions)
+                        
+                        DispatchQueue.main.async {
+                            self.getNewQuestion(questions: self.questions!)
                         }
                     }
-                    
                 }
             }
         }
@@ -74,8 +73,8 @@ class MainInteractor {
                 guard let value = snapshot.value else { return }
                 do {
                     let jsonData = try JSONSerialization.data(withJSONObject: value, options: [])
-                    let questions = try JSONDecoder().decode([Question].self, from: jsonData)
-                    completion(questions)
+                    self.questions = try JSONDecoder().decode([Question].self, from: jsonData)
+                    completion(self.questions!)
                 } catch let error {
                     print(error)
                 }

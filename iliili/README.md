@@ -10,13 +10,13 @@
 - [x] Full screen
 - [x] Show the main view as it used to be shown
 - [x] The initial loading ("Start" pressed -> show the questions) is long, what can I do about it?
-- [ ] Getting %
+- [x] Getting %
     - [x] Write to the json on the server (if connected)
     - [x] Fix the json, add the % section. Get the %
     - [x] Fix the extra vote on the first call of getNewQuestion
     - [x] Show animated view with %
 - [x] Getting the questions to a local variable
-- [ ] Check if works without connection
+- [x] Check if works without connection
 - [ ] Show the new question after the votes result animation
 
 
