@@ -55,13 +55,15 @@ class MainInteractor {
                     }
                 } catch {
                     print("reading from the local file")
-                    let url = Bundle.main.url(forResource: "questions", withExtension: "json")!
-                    let data = try! Data(contentsOf: url)
-                    let decoder = JSONDecoder()
-                    self.questions = try! decoder.decode([Question].self, from: data)
-                    
-                    DispatchQueue.main.async {
-                        self.getNewQuestion()
+                    if let url = Bundle.main.url(forResource: "questions", withExtension: "json") {
+                        if let data = try? Data(contentsOf: url) {
+                            let decoder = JSONDecoder()
+                            self.questions = try? decoder.decode([Question].self, from: data)
+
+                            DispatchQueue.main.async {
+                                self.getNewQuestion()
+                            }
+                        }
                     }
                 }
             }
@@ -74,7 +76,9 @@ class MainInteractor {
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: value, options: [])
                 self.questions = try JSONDecoder().decode([Question].self, from: jsonData)
-                completion(self.questions!)
+                if let questions = self.questions {
+                    completion(questions)
+                }
             } catch let error {
                 print(error)
             }
@@ -83,10 +87,16 @@ class MainInteractor {
     
     //Called only once, on the view load
     func getNewQuestion() {
-        randomQuestionNumber = Int.random(in: 0...(questions!.count - 1))
-        question = questions?[randomQuestionNumber!]
-        previousRandomQuestionNumber = randomQuestionNumber
-        presenter?.showNewQuestion(question: question!)
+        if let array = questions {
+            randomQuestionNumber = Int.random(in: 0...(array.count - 1))
+            if let random = randomQuestionNumber {
+                question = questions?[random]
+                if let newQuestion = question {
+                    previousRandomQuestionNumber = randomQuestionNumber
+                    presenter?.showNewQuestion(question: newQuestion)
+                }
+            }
+        }
     }
     
     func chooseOption1() {
@@ -99,11 +109,19 @@ class MainInteractor {
     
     //MARK: New question
     func getNewQuestion(optionVotesStringTag: String) {
-        sendVote(questionNumber: previousRandomQuestionNumber!, optionVotesStringTag: optionVotesStringTag)
-        randomQuestionNumber = Int.random(in: 0...(questions!.count - 1))
-        question = questions?[randomQuestionNumber!]
-        previousRandomQuestionNumber = randomQuestionNumber
-        presenter?.showNewQuestion(question: question!)
+        if let number = previousRandomQuestionNumber {
+            sendVote(questionNumber: number, optionVotesStringTag: optionVotesStringTag)
+            if let questionsArray = questions {
+                randomQuestionNumber = Int.random(in: 0...(questionsArray.count - 1))
+                if let random = randomQuestionNumber {
+                    question = questions?[random]
+                    if let newQuestion = question {
+                        previousRandomQuestionNumber = randomQuestionNumber
+                        presenter?.showNewQuestion(question: newQuestion)
+                    }
+                }
+            }
+        }
     }
     
     //MARK: Vote
