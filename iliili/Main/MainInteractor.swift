@@ -23,18 +23,15 @@ struct Options: Codable {
 
 class MainInteractor {
     var presenter: MainPresenter?
+    var fireabseService: FirebaseService?
     let questionsFirebase = "https://firebasestorage.googleapis.com/v0/b/iliili.appspot.com/o/questions.json?alt=media&token=7e0b14a4-f0c6-4858-8103-1cd6dae40c1f"
     let optionVotesTag = ("option1votes", "option2votes")
-    let database = Database.database().reference().child("questions")
     
     var randomQuestionNumber: Int?
     var previousRandomQuestionNumber: Int?
     
     var questions: [Question]?
     var question: Question?
-    
-    //TODO: try to read the first set of random questions into a local variable
-    //    var firstTenQuestion: [Question]?
     
     func initQuestion() {
         presenter?.showLoading()
@@ -49,7 +46,13 @@ class MainInteractor {
                     _ = try Data(contentsOf: url as URL)
                     
                     DispatchQueue.main.async {
-                        self.convertFirebaseDatasnapshotToQuestion { (questions) in
+//                        self.convertFirebaseDatasnapshotToQuestion { (questions) in
+//                            self.getNewQuestion()
+//                        }
+                        
+                        //MARK: firebase 1
+                        
+                        self.fireabseService?.convertFirebaseDatasnapshotToQuestion { (questions) in
                             self.getNewQuestion()
                         }
                     }
@@ -59,7 +62,7 @@ class MainInteractor {
                         if let data = try? Data(contentsOf: url) {
                             let decoder = JSONDecoder()
                             self.questions = try? decoder.decode([Question].self, from: data)
-
+                            
                             DispatchQueue.main.async {
                                 self.getNewQuestion()
                             }
@@ -70,32 +73,32 @@ class MainInteractor {
         }
     }
     
-    func convertFirebaseDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void) {
-        database.observeSingleEvent(of: .value, with: { snapshot in
-            guard let value = snapshot.value else { return }
-            do {
-                let jsonData = try JSONSerialization.data(withJSONObject: value, options: [])
-                self.questions = try JSONDecoder().decode([Question].self, from: jsonData)
-                if let questions = self.questions {
-                    completion(questions)
-                }
-            } catch let error {
-                print(error)
-            }
-        })
-    }
-    
-    //Called only once, on the view load
-    func getNewQuestion() {
+    //MARK: New question
+    func getQuestion() -> Question? {
         if let array = questions {
             randomQuestionNumber = Int.random(in: 0...(array.count - 1))
             if let random = randomQuestionNumber {
                 question = questions?[random]
                 if let newQuestion = question {
                     previousRandomQuestionNumber = randomQuestionNumber
-                    presenter?.showNewQuestion(question: newQuestion)
+                    return newQuestion
                 }
             }
+        }
+        return nil
+    }
+    
+    //Called only once, on the view load
+    func getNewQuestion() {
+        if let question = getQuestion() {
+            presenter?.showNewQuestion(question: question)
+        }
+    }
+    
+    func getNewQuestion(optionVotesStringTag: String) {
+        if let number = previousRandomQuestionNumber {
+            fireabseService?.sendVote(questionNumber: number, optionVotesStringTag: optionVotesStringTag)
+            getNewQuestion()
         }
     }
     
@@ -107,60 +110,22 @@ class MainInteractor {
         getNewQuestion(optionVotesStringTag: optionVotesTag.1)
     }
     
-    //MARK: New question
-    func getNewQuestion(optionVotesStringTag: String) {
-        if let number = previousRandomQuestionNumber {
-            sendVote(questionNumber: number, optionVotesStringTag: optionVotesStringTag)
-            if let questionsArray = questions {
-                randomQuestionNumber = Int.random(in: 0...(questionsArray.count - 1))
-                if let random = randomQuestionNumber {
-                    question = questions?[random]
-                    if let newQuestion = question {
-                        previousRandomQuestionNumber = randomQuestionNumber
-                        presenter?.showNewQuestion(question: newQuestion)
-                    }
-                }
-            }
-        }
-    }
-    
-    //MARK: Vote
-    func sendVote(questionNumber: Int, optionVotesStringTag: String) {
-        database.child(String(questionNumber)).child("options").child(optionVotesStringTag).observeSingleEvent(of: .value, with: { snapshot in
-            if var votes = snapshot.value as? Int {
-                votes += 1
-                self.database.child(String(questionNumber)).child("options").child(optionVotesStringTag).setValue(votes)
-                self.countVotesDependingOnTag(optionVotesTag: optionVotesStringTag,
-                                              questionNumber: questionNumber,
-                                              votes: votes)
-            }
-        })
-    }
     
     func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int) {
         switch optionVotesTag {
         case self.optionVotesTag.1:
-            countVotes(optionVotesTag: self.optionVotesTag.0,
-                       questionNumber: questionNumber,
-                       votes: votes)
+            fireabseService?.countVotes(optionVotesTag: self.optionVotesTag.0,
+                                        questionNumber: questionNumber,
+                                        votes: votes)
             break;
         case self.optionVotesTag.0:
-            countVotes(optionVotesTag: self.optionVotesTag.1,
-                       questionNumber: questionNumber,
-                       votes: votes)
+            fireabseService?.countVotes(optionVotesTag: self.optionVotesTag.1,
+                                        questionNumber: questionNumber,
+                                        votes: votes)
             break;
         default: ()
         break;
         }
-    }
-    
-    func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int) {
-        self.database.child(String(questionNumber)).child("options").child(optionVotesTag).observeSingleEvent(of: .value, with: { snapshot in
-            self.getVotesPercentage(snapshot: snapshot,
-                                    votes: votes,
-                                    questionNumber: questionNumber,
-                                    optionVotesTag: optionVotesTag)
-        })
     }
     
     func getVotesPercentage(snapshot: DataSnapshot,
@@ -187,5 +152,49 @@ class MainInteractor {
                   "| Percentage", percentageOfVotes,"%")
         }
     }
+    
+    
+//    let database = Database.database().reference().child("questions")
+    
+//    func convertFirebaseDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void) {
+//        fireabseService?.database.observeSingleEvent(of: .value, with: { snapshot in
+//            guard let value = snapshot.value else { return }
+//            do {
+//                let jsonData = try JSONSerialization.data(withJSONObject: value, options: [])
+//                self.questions = try JSONDecoder().decode([Question].self, from: jsonData)
+//                print(self.questions)
+//                if let questions = self.questions {
+//                    completion(questions)
+//                }
+//            } catch let error {
+//                print(error)
+//            }
+//        })
+//    }
+//
+//
+//    MARK: Vote
+//    func sendVote(questionNumber: Int, optionVotesStringTag: String) {
+//        database.child(String(questionNumber)).child("options").child(optionVotesStringTag).observeSingleEvent(of: .value, with: { snapshot in
+//            if var votes = snapshot.value as? Int {
+//                votes += 1
+//                self.database.child(String(questionNumber)).child("options").child(optionVotesStringTag).setValue(votes)
+//                self.countVotesDependingOnTag(optionVotesTag: optionVotesStringTag,
+//                                              questionNumber: questionNumber,
+//                                              votes: votes)
+//            }
+//        })
+//    }
+//
+//
+//    func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int) {
+//        self.database.child(String(questionNumber)).child("options").child(optionVotesTag).observeSingleEvent(of: .value, with: { snapshot in
+//            self.getVotesPercentage(snapshot: snapshot,
+//                                    votes: votes,
+//                                    questionNumber: questionNumber,
+//                                    optionVotesTag: optionVotesTag)
+//        })
+//    }
+    
     
 }

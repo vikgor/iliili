@@ -45,6 +45,10 @@ class MainViewController: UIViewController {
         let presenter = MainPresenter()
         interactor.presenter = presenter
         presenter.viewController = self
+        
+        let firebaseService = FirebaseService()
+        interactor.fireabseService = firebaseService
+        firebaseService.interactor = interactor
     }
     
     func initQuestion() {
