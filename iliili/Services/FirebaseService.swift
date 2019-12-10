@@ -9,24 +9,26 @@
 import Foundation
 import FirebaseDatabase
 
-class FirebaseService {
+class FirebaseService: FirebaseDelegate {
     
     var interactor: MainInteractor?
     let database = Database.database().reference().child("questions")
-    
+//
+//}
+//
+//extension FirebaseService: FirebaseDelegate {
+//
     func convertFirebaseDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void) {
+        interactor?.firebaseDelegate = self
+        
         database.observeSingleEvent(of: .value, with: { snapshot in
             guard let value = snapshot.value else { return }
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: value, options: [])
                 let array = try! JSONDecoder().decode([Question].self, from: jsonData)
-                print("array is \(array)")
                 self.interactor?.questions = array
-                print(self.interactor?.questions)
-                print(11)
                 if let questions = self.interactor?.questions {
                     completion(questions)
-                    print(22)
                 }
             } catch let error {
                 print(error)
@@ -60,7 +62,7 @@ class FirebaseService {
 
 /*
  
- Firebase does:
+ Firebase service does:
  
  1. Get all the questions -> [question]
  2. Get a random question
