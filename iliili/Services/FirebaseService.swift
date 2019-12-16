@@ -9,25 +9,33 @@
 import Foundation
 import FirebaseDatabase
 
-class FirebaseService: FirebaseDelegate {
+protocol FirebaseDelegate {
+    func convertFirebaseDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void)
+    func sendVote(questionNumber: Int, optionVotesStringTag: String)
+    func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int)
+}
+
+class FirebaseService {
     
-    var interactor: MainInteractor?
+//    var firebaseDelegate: FirebaseDelegate?   //??? why not FirebaseDelegate?
+    var firebaseDelegate: MainInteractor?
     let database = Database.database().reference().child("questions")
-//
-//}
-//
-//extension FirebaseService: FirebaseDelegate {
-//
+    
+}
+
+extension FirebaseService: FirebaseDelegate {
+    
     func convertFirebaseDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void) {
-        interactor?.firebaseDelegate = self
+        
+//        firebaseDelegate?.firebaseService = self
         
         database.observeSingleEvent(of: .value, with: { snapshot in
             guard let value = snapshot.value else { return }
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: value, options: [])
                 let array = try! JSONDecoder().decode([Question].self, from: jsonData)
-                self.interactor?.questions = array
-                if let questions = self.interactor?.questions {
+                self.firebaseDelegate?.questions = array
+                if let questions = self.firebaseDelegate?.questions {
                     completion(questions)
                 }
             } catch let error {
@@ -41,7 +49,7 @@ class FirebaseService: FirebaseDelegate {
             if var votes = snapshot.value as? Int {
                 votes += 1
                 self.database.child(String(questionNumber)).child("options").child(optionVotesStringTag).setValue(votes)
-                self.interactor?.countVotesDependingOnTag(optionVotesTag: optionVotesStringTag,
+                self.firebaseDelegate?.countVotesDependingOnTag(optionVotesTag: optionVotesStringTag,
                                                           questionNumber: questionNumber,
                                                           votes: votes)
             }
@@ -50,7 +58,7 @@ class FirebaseService: FirebaseDelegate {
     
     func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int) {
         self.database.child(String(questionNumber)).child("options").child(optionVotesTag).observeSingleEvent(of: .value, with: { snapshot in
-            self.interactor?.getVotesPercentage(snapshot: snapshot,
+            self.firebaseDelegate?.getVotesPercentage(snapshot: snapshot,
                                                 votes: votes,
                                                 questionNumber: questionNumber,
                                                 optionVotesTag: optionVotesTag)

@@ -21,15 +21,9 @@ struct Options: Codable {
     var option2votes: Int
 }
 
-protocol FirebaseDelegate {
-    func convertFirebaseDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void)
-    func sendVote(questionNumber: Int, optionVotesStringTag: String)
-    func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int)
-}
-
 class MainInteractor {
     var presenter: MainPresenter?
-    var firebaseDelegate: FirebaseDelegate?
+    var firebaseService: FirebaseService?
     let questionsFirebase = "https://firebasestorage.googleapis.com/v0/b/iliili.appspot.com/o/questions.json?alt=media&token=7e0b14a4-f0c6-4858-8103-1cd6dae40c1f"
     let optionVotesTag = ("option1votes", "option2votes")
     
@@ -52,7 +46,7 @@ class MainInteractor {
                     _ = try Data(contentsOf: url as URL)
                     
                     DispatchQueue.main.async {
-                        self.firebaseDelegate?.convertFirebaseDatasnapshotToQuestion { (questions) in
+                        self.firebaseService?.convertFirebaseDatasnapshotToQuestion { (questions) in
                             self.getNewQuestion()
                         }
                     }
@@ -97,7 +91,7 @@ class MainInteractor {
     
     func getNewQuestion(optionVotesStringTag: String) {
         if let number = previousRandomQuestionNumber {
-            firebaseDelegate?.sendVote(questionNumber: number, optionVotesStringTag: optionVotesStringTag)
+            firebaseService?.sendVote(questionNumber: number, optionVotesStringTag: optionVotesStringTag)
             getNewQuestion()
         }
     }
@@ -114,12 +108,12 @@ class MainInteractor {
     func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int) {
         switch optionVotesTag {
         case self.optionVotesTag.1:
-            firebaseDelegate?.countVotes(optionVotesTag: self.optionVotesTag.0,
+            firebaseService?.countVotes(optionVotesTag: self.optionVotesTag.0,
                                          questionNumber: questionNumber,
                                          votes: votes)
             break;
         case self.optionVotesTag.0:
-            firebaseDelegate?.countVotes(optionVotesTag: self.optionVotesTag.1,
+            firebaseService?.countVotes(optionVotesTag: self.optionVotesTag.1,
                                          questionNumber: questionNumber,
                                          votes: votes)
             break;
@@ -153,4 +147,6 @@ class MainInteractor {
         }
     }
     
+    
 }
+
