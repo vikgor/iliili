@@ -47,12 +47,13 @@ class MainViewController: UIViewController {
         presenter.viewController = self
         
         let firebaseService = FirebaseService()
-        
-//        firebaseService.interactor = interactor
+
 //        interactor.firebaseDelegate = firebaseService
+//        firebaseService.interactor = interactor
         
         interactor.firebaseService = firebaseService
         firebaseService.firebaseDelegate = interactor
+//        firebaseService.firebaseDelegate = interactor as! FirebaseDelegate
         
     }
     

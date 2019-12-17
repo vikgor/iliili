@@ -13,21 +13,22 @@ protocol FirebaseDelegate {
     func convertFirebaseDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void)
     func sendVote(questionNumber: Int, optionVotesStringTag: String)
     func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int)
+    
+//    func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int)
+//    func getVotesPercentage(snapshot: DataSnapshot, votes: Int, questionNumber: Int, optionVotesTag: String)
 }
 
 class FirebaseService {
     
-//    var firebaseDelegate: FirebaseDelegate?   //??? why not FirebaseDelegate?
     var firebaseDelegate: MainInteractor?
+//    var firebaseDelegate: FirebaseDelegate?
     let database = Database.database().reference().child("questions")
-    
+ 
 }
 
 extension FirebaseService: FirebaseDelegate {
     
     func convertFirebaseDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void) {
-        
-//        firebaseDelegate?.firebaseService = self
         
         database.observeSingleEvent(of: .value, with: { snapshot in
             guard let value = snapshot.value else { return }
@@ -35,9 +36,11 @@ extension FirebaseService: FirebaseDelegate {
                 let jsonData = try JSONSerialization.data(withJSONObject: value, options: [])
                 let array = try! JSONDecoder().decode([Question].self, from: jsonData)
                 self.firebaseDelegate?.questions = array
-                if let questions = self.firebaseDelegate?.questions {
-                    completion(questions)
-                }
+                
+                completion(array)
+//                if let questions = self.firebaseDelegate?.questions {
+//                    completion(questions)
+//                }
             } catch let error {
                 print(error)
             }
@@ -66,6 +69,12 @@ extension FirebaseService: FirebaseDelegate {
     }
     
 }
+
+
+
+
+
+
 
 
 /*
