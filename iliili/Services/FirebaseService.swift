@@ -19,31 +19,23 @@ protocol FirebaseDelegate {
 }
 
 class FirebaseService {
-    
-    var firebaseDelegate: MainInteractor?
-//    var firebaseDelegate: FirebaseDelegate?
+    var firebaseDelegate: FirebaseDelegate?
     let database = Database.database().reference().child("questions")
- 
 }
 
 extension FirebaseService: FirebaseDelegate {
-    
     func convertFirebaseDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void) {
-        
+        var array: [Question]?
         database.observeSingleEvent(of: .value, with: { snapshot in
             guard let value = snapshot.value else { return }
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: value, options: [])
-                let array = try! JSONDecoder().decode([Question].self, from: jsonData)
-                self.firebaseDelegate?.questions = array
-                
-                completion(array)
-//                if let questions = self.firebaseDelegate?.questions {
-//                    completion(questions)
-//                }
+                array = try! JSONDecoder().decode([Question].self, from: jsonData)
             } catch let error {
                 print(error)
             }
+            //at this point, questions is initialized and ready to work with, but not going back through
+            completion(array!)
         })
     }
     
@@ -52,19 +44,19 @@ extension FirebaseService: FirebaseDelegate {
             if var votes = snapshot.value as? Int {
                 votes += 1
                 self.database.child(String(questionNumber)).child("options").child(optionVotesStringTag).setValue(votes)
-                self.firebaseDelegate?.countVotesDependingOnTag(optionVotesTag: optionVotesStringTag,
-                                                          questionNumber: questionNumber,
-                                                          votes: votes)
+//                self.firebaseDelegate?.countVotesDependingOnTag(optionVotesTag: optionVotesStringTag,
+//                                                          questionNumber: questionNumber,
+//                                                          votes: votes)
             }
         })
     }
     
     func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int) {
         self.database.child(String(questionNumber)).child("options").child(optionVotesTag).observeSingleEvent(of: .value, with: { snapshot in
-            self.firebaseDelegate?.getVotesPercentage(snapshot: snapshot,
-                                                votes: votes,
-                                                questionNumber: questionNumber,
-                                                optionVotesTag: optionVotesTag)
+//            self.firebaseDelegate?.getVotesPercentage(snapshot: snapshot,
+//                                                votes: votes,
+//                                                questionNumber: questionNumber,
+//                                                optionVotesTag: optionVotesTag)
         })
     }
     

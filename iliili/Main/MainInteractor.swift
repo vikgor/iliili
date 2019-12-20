@@ -48,15 +48,10 @@ class MainInteractor {
                     _ = try Data(contentsOf: url as URL)
                     
                     DispatchQueue.main.async {
-                        self.firebaseService?.convertFirebaseDatasnapshotToQuestion { (questions) in
+                        self.firebaseService?.convertFirebaseDatasnapshotToQuestion() { questions in
+                            self.questions = questions
                             self.getNewQuestion()
                         }
-//                        self.convertFirebaseDatasnapshotToQuestion { (questions) in
-//                            self.getNewQuestion()
-//                        }
-//                        self.firebaseDelegate?.convertFirebaseDatasnapshotToQuestion { (questions) in
-//                            self.getNewQuestion()
-//                        }
                     }
                 } catch {
                     print("reading from the local file")
