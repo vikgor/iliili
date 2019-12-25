@@ -14,16 +14,19 @@ protocol FirebaseDelegate {
     func sendVote(questionNumber: Int, optionVotesStringTag: String)
     func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int)
     
-//    func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int)
+    func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int)
 //    func getVotesPercentage(snapshot: DataSnapshot, votes: Int, questionNumber: Int, optionVotesTag: String)
 }
 
 class FirebaseService {
     var firebaseDelegate: FirebaseDelegate?
     let database = Database.database().reference().child("questions")
+    let optionVotesTag = ("option1votes", "option2votes")
+    var votesPercent: Int?
 }
 
 extension FirebaseService: FirebaseDelegate {
+    
     func convertFirebaseDatasnapshotToQuestion(completion: @escaping ([Question]) -> Void) {
         var array: [Question]?
         database.observeSingleEvent(of: .value, with: { snapshot in
@@ -34,8 +37,9 @@ extension FirebaseService: FirebaseDelegate {
             } catch let error {
                 print(error)
             }
-            //at this point, questions is initialized and ready to work with, but not going back through
-            completion(array!)
+            if let questions = array {
+                completion(questions)
+            }
         })
     }
     
@@ -44,39 +48,73 @@ extension FirebaseService: FirebaseDelegate {
             if var votes = snapshot.value as? Int {
                 votes += 1
                 self.database.child(String(questionNumber)).child("options").child(optionVotesStringTag).setValue(votes)
-//                self.firebaseDelegate?.countVotesDependingOnTag(optionVotesTag: optionVotesStringTag,
-//                                                          questionNumber: questionNumber,
-//                                                          votes: votes)
+                self.countVotesDependingOnTag(optionVotesTag: optionVotesStringTag,
+                                              questionNumber: questionNumber,
+                                              votes: votes)
             }
         })
     }
     
+    
+    func countVotesDependingOnTag(optionVotesTag: String, questionNumber: Int, votes: Int) {
+        switch optionVotesTag {
+        case self.optionVotesTag.1:
+            countVotes(optionVotesTag: self.optionVotesTag.0,
+                       questionNumber: questionNumber,
+                       votes: votes)
+            break;
+        case self.optionVotesTag.0:
+            countVotes(optionVotesTag: self.optionVotesTag.1,
+                       questionNumber: questionNumber,
+                       votes: votes)
+            break;
+        default: ()
+        break;
+        }
+    }
+    
     func countVotes(optionVotesTag: String, questionNumber: Int, votes: Int) {
         self.database.child(String(questionNumber)).child("options").child(optionVotesTag).observeSingleEvent(of: .value, with: { snapshot in
-//            self.firebaseDelegate?.getVotesPercentage(snapshot: snapshot,
-//                                                votes: votes,
-//                                                questionNumber: questionNumber,
-//                                                optionVotesTag: optionVotesTag)
+            var percentageOfVotes: Int?
+            self.getVotesPercentage(snapshot: snapshot,
+                                    votes: votes,
+                                    questionNumber: questionNumber,
+                                    optionVotesTag: optionVotesTag) { value in
+                                        percentageOfVotes = value
+            }
+
+//            print("votesPercent = \(self.votesPercent)")
+//            print("percentageOfVotes = \(percentageOfVotes)")
+            
         })
     }
     
+    func getVotesPercentage(snapshot: DataSnapshot,
+                            votes: Int,
+                            questionNumber: Int,
+                            optionVotesTag: String,
+                            completion: (Int) -> Void) {
+        if let otherVotes = snapshot.value as? Int {
+            let percentageOfVotes = Int((Double(votes) / Double((votes + otherVotes)))*100)
+            
+            print("Question set: \(questionNumber) | Votes for chosen option: \(votes) | Votes for other option: \(otherVotes) | Percentage \(percentageOfVotes)%")
+            
+            self.votesPercent = percentageOfVotes
+            
+            completion(percentageOfVotes)
+            
+//            switch optionVotesTag {
+//            case self.optionVotesTag.1:
+////                self.presenter?.showVotesAnimationOption1(percentageOfVotes: percentageOfVotes)
+//                break;
+//            case self.optionVotesTag.0:
+////                self.presenter?.showVotesAnimationOption2(percentageOfVotes: percentageOfVotes)
+//                break;
+//            default: ()
+//            break;
+//            }
+            
+        }
+    }
+    
 }
-
-
-
-
-
-
-
-
-/*
- 
- Firebase service does:
- 
- 1. Get all the questions -> [question]
- 2. Get a random question
- 3. Count the vote depending on a tag
- 4. Vote++
- 5. Send the vote
- 
- */
