@@ -9,5 +9,3 @@
 ### NB
 Для полноценной работы приложения и базы данных Firebase необходимо зайти в [консоль](https://console.firebase.google.com/) Firebase, установить базу данных Realtime Database, после чего скачать файл *GoogleService-Info.plist* в настройках проекта.
 Возможно импортировать файл *qustions.json* для заполнения базы вопросов.
-
-
