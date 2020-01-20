@@ -74,6 +74,8 @@
 		056E704223731B48007E326C = {
 			isa = PBXGroup;
 			children = (
+				056E70692374581C007E326C /* README.md */,
+				05F05DC923D62B9A00316325 /* screenshots */,
 				056E704D23731B48007E326C /* iliili */,
 				056E704C23731B48007E326C /* Products */,
 				255E2EAAF21008DD7302BF3A /* Pods */,
@@ -103,8 +105,6 @@
 				0583B6E1237DA23800D67085 /* GoogleService-Info.plist */,
 				056E705C23731B4E007E326C /* Info.plist */,
 				056E706A2374BD31007E326C /* questions.json */,
-				056E70692374581C007E326C /* README.md */,
-				05F05DC923D62B9A00316325 /* screenshots */,
 			);
 			path = iliili;
 			sourceTree = "<group>";
